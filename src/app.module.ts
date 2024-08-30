@@ -8,6 +8,7 @@ import { TablesModule } from './tables/tables.module';
 import { OrderProductModule } from './order-product/order-product.module';
 import { AuthModule } from './auth/model/auth.module';
 import { ConfigModule } from '@nestjs/config';
+import { ProductCategoriesModule } from './products/product-categories.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { ConfigModule } from '@nestjs/config';
       autoLoadEntities: true,
       synchronize: true, // Be careful with this in production!
     }),
+    ProductCategoriesModule,
     EstablishmentsModule,
     OrdersModule,
     UsersModule,

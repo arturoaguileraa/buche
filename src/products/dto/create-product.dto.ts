@@ -1,7 +1,24 @@
-// create-product.dto.ts
+import { IsNotEmpty, IsNumber, IsString, IsBoolean } from 'class-validator';
+
 export class CreateProductDto {
-    name: string;
-    price: number;
-    description: string;
-    availability: boolean;
+  @IsString()
+  @IsNotEmpty()
+  name: string;
+
+  @IsNumber()
+  @IsNotEmpty()
+  price: number;
+
+  @IsString()
+  description: string;
+
+  @IsBoolean()
+  @IsNotEmpty()
+  availability: boolean;
+
+  @IsNumber()
+  categoryId: number;
+
+  @IsNumber()
+  establishmentId: number;
 }

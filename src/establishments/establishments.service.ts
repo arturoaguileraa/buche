@@ -1,20 +1,19 @@
-import { Injectable, BadRequestException, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Establishment } from './entities/establishment.entity';
+import { User } from '../users/entities/user.entity';
 import { CreateEstablishmentDto } from './dto/create-establishment.dto';
 import { UpdateEstablishmentDto } from './dto/update-establishment.dto';
-import { User } from 'src/users/entities/user.entity';
-import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class EstablishmentsService {
   constructor(
     @InjectRepository(Establishment)
     private establishmentRepository: Repository<Establishment>,
+
     @InjectRepository(User)
-    private userRepository: Repository<User>,
-    private usersService: UsersService,
+    private userRepository: Repository<User>,  // Asegúrate de que esto esté correcto
   ) {}
 
   async create(createEstablishmentDto: CreateEstablishmentDto, ownerId: number): Promise<Establishment> {
