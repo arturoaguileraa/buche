@@ -76,7 +76,7 @@ const EstablishmentPage: React.FC = () => {
   const filteredProducts = products.filter(product => product.categoryId === selectedCategory);
 
   const handleAddProduct = () => {
-    window.location.href = '/add-product';
+    window.location.href += '/add-product';
   };
 
   return (

@@ -47,9 +47,9 @@ const EditEstablishmentPage: React.FC = () => {
   
     try {
       await api.patch(`/establishments/${id}`, dataToSubmit);
-      router.push(`/e/${id}`);
+      router.push(`/`);
     } catch (error) {
-      console.error('Error updating establishment:', error.response?.data || error.message);
+      console.error('Error updating establishment:', error);
     }
   };
   

@@ -5,6 +5,7 @@ import { signOut } from 'next-auth/react';
 import { Button } from './button';
 import BackButton from './backbutton';
 import { useProfileData } from '@/app/utils/jwtUtils';
+import Link from 'next/link';
 
 const Header = () => {
   const profileData = useProfileData();
@@ -33,7 +34,9 @@ const Header = () => {
   return (
     <header className={`flex justify-between items-center p-4 border-b border-gray-300 ${getRoleClass(profileData?.roles)}`}>
       <div className="flex-shrink-0">
+      <Link href="/home">
         <h1 className="text-xl font-bold text-gray-700">Buche</h1>
+      </Link>
       </div>
       {profileData ? (
         <div className="flex justify-center items-center">
