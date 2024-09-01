@@ -6,6 +6,7 @@ import ProductCard from '@/components/productcard';
 import BackButton from '@/components/ui/backbutton';
 import { Button } from '@/components/ui/button';
 import api from '@/app/api/api';
+import { useProfileData } from '@/app/utils/jwtUtils';
 
 interface Product {
   id: number;
@@ -33,14 +34,19 @@ interface Establishment {
   email: string;
   website: string;
   description: string;
+  owner: {id:string}
 }
 
 const EstablishmentPage: React.FC = () => {
+  const profileData = useProfileData();
   const { id } = useParams();
   const [selectedCategory, setSelectedCategory] = useState<number>();
   const [establishment, setEstablishment] = useState<Establishment | null>(null);
   const [productCategories, setProductCategories] = useState<ProductCategory[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
+
+  const canEditOrAddProduct = profileData?.roles === 'ADMIN' || (profileData?.roles === 'OWNER' && establishment?.owner.id === profileData.id);
+
   
   useEffect(() => {
     const fetchEstablishmentData = async () => {
@@ -84,16 +90,15 @@ const EstablishmentPage: React.FC = () => {
   const handleAddProduct = () => {
     window.location.href = `/e/${id}/add-product`;
   };
+
+  const handleEditEstablishment = () => {
+    window.location.href = `/e/${id}/edit`;
+  };
   const filteredProducts = products.filter(product => product.category.id === selectedCategory);
   
 
   return (
     <div className="container mx-auto py-8">
-      <div className="flex w-full justify-between">
-        <BackButton />
-        <Button onClick={handleAddProduct}>+ Añadir producto</Button>
-      </div>
-      
       {establishment && (
         <div className="mb-8">
           <h1 className="text-4xl font-bold mb-4">{establishment.name}</h1>
@@ -108,8 +113,15 @@ const EstablishmentPage: React.FC = () => {
         </div>
       )}
 
-      <div className="flex space-x-4 mb-8 border-b pb-4">
-        {productCategories.map(category => (
+      {canEditOrAddProduct && (
+                <div className="flex w-full justify-between">
+                    <Button onClick={handleEditEstablishment}>Editar establecimiento</Button>
+                    <Button onClick={handleAddProduct}>+ Añadir producto</Button>
+                </div>
+            )}
+
+      <div className="flex space-x-4 mb-8 mt-4 border-b border-t pt-4 pb-4">
+        {productCategories.length > 0 ? productCategories.map(category => (
           <button
             key={category.id}
             className={`px-4 py-2 rounded ${selectedCategory === category.id ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}
@@ -117,7 +129,7 @@ const EstablishmentPage: React.FC = () => {
           >
             {category.name}
           </button>
-        ))}
+        )) : (<div>Este establecimiento no tiene productos todavía...</div>)}
       </div>
 
       <div>
