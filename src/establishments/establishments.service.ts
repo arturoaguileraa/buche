@@ -35,13 +35,14 @@ export class EstablishmentsService {
   async findAll(options: { limit: number, offset: number }): Promise<Establishment[]> {
     const { limit, offset } = options;
     return this.establishmentRepository.find({
+        relations: ['owner'],
         skip: offset,
         take: limit,
     });
-}
+  }
 
   async findOne(id: number): Promise<Establishment> {
-    return this.establishmentRepository.findOne({ where: { id } });
+    return this.establishmentRepository.findOne({ relations: ['owner'], where: { id } });
   }
 
   async update(id: number, updateEstablishmentDto: UpdateEstablishmentDto): Promise<Establishment> {
