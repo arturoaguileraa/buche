@@ -18,6 +18,7 @@ const EditEstablishmentPage: React.FC = () => {
     email: '',
     website: '',
     description: '',
+    owner: {},
   });
 
   useEffect(() => {
@@ -41,9 +42,11 @@ const EditEstablishmentPage: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    console.log(formData);
   
     // Clonar formData y eliminar 'id' si está presente
-    const { id, ...dataToSubmit } = formData;
+    const { id, owner, ...dataToSubmit } = formData;
   
     try {
       await api.patch(`/establishments/${id}`, dataToSubmit);
