@@ -13,9 +13,15 @@ export class ProductsController {
   }
 
  @Get(':id')
-    findOne(@Param('id') id: number) {
-        return this.productsService.findOne(id);
-    }
+  findOne(@Param('id') id: number) {
+      return this.productsService.findOne(id);
+  }
+
+  
+  @Get('establishment/:id')
+  findAllByEstablishment(@Param('id') id: number) {
+    return this.productsService.findAllByEstablishment(id);
+  }
 
     // Más métodos para actualizar, eliminar, etc.
 }

@@ -39,9 +39,17 @@ export class ProductsService {
     return this.productRepository.save(product);
   }  
 
-    async findOne(id: number): Promise<Product> {
-        return this.productRepository.findOne({ where: { id } });
-    }
+  // Método para obtener todos los productos de un establecimiento
+  async findAllByEstablishment(establishmentId: number): Promise<Product[]> {
+    return await this.productRepository.find({
+      where: { establishment: { id: establishmentId } },
+      relations: ['establishment', 'category'], // Para incluir relaciones si es necesario
+    });
+  }
+
+  async findOne(id: number): Promise<Product> {
+      return this.productRepository.findOne({ where: { id } });
+  }
     
     // Resto del código...
 }
