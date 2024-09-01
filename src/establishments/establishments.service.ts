@@ -32,11 +32,15 @@ export class EstablishmentsService {
     return establishment;
   }
 
-  findAll(): Promise<Establishment[]> {
-    return this.establishmentRepository.find();
-  }
+  async findAll(options: { limit: number, offset: number }): Promise<Establishment[]> {
+    const { limit, offset } = options;
+    return this.establishmentRepository.find({
+        skip: offset,
+        take: limit,
+    });
+}
 
-  findOne(id: number): Promise<Establishment> {
+  async findOne(id: number): Promise<Establishment> {
     return this.establishmentRepository.findOne({ where: { id } });
   }
 
