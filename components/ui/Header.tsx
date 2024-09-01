@@ -6,15 +6,10 @@ import { Button } from './button';
 import BackButton from './backbutton';
 import { useProfileData } from '@/app/utils/jwtUtils';
 import Link from 'next/link';
+import SessionButton from './SessionButton';
 
 const Header = () => {
   const profileData = useProfileData();
-
-  const handleSignOut = () => {
-    if (confirm('¿Estás seguro que quieres cerrar sesión?')) {
-      signOut();
-    }
-  };
 
   const getRoleClass = (role: string | undefined) => {
     switch (role) {
@@ -41,9 +36,7 @@ const Header = () => {
       {profileData ? (
         <div className="flex justify-center items-center">
           <BackButton />
-          <Button variant="destructive" onClick={() => handleSignOut()}>
-            Cerrar sesión
-          </Button>
+          <SessionButton></SessionButton>
           <div className="flex items-center h-10 w-10 rounded-full mr-4">
             <img src={profileData?.image as string} alt="" className="rounded-full" />
           </div>
