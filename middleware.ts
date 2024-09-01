@@ -60,6 +60,27 @@ export async function middleware(request: NextRequestWithAuth) {
     return NextResponse.redirect(new URL("/home", request.url));
   }
 
+    // Restricciones para rutas específicas
+    if (request.nextUrl.pathname.match(/^\/e\/\d+\/(add-product|edit)$/)) {
+      const establishmentId = request.nextUrl.pathname.split('/')[2];
+
+      if (userRole !== 'ADMIN' && userRole !== 'OWNER') {
+          // Si el rol no es ADMIN ni OWNER, redirigir
+          return NextResponse.redirect(new URL('/home', request.url));
+      }
+
+      if (userRole === 'OWNER') {
+          // Verificar si el ownerId coincide con el del establecimiento
+          const response = await fetch(`http://localhost:3001/establishments/${establishmentId}`);
+          const establishment = await response.json();
+
+          if (establishment.owner.id !== user.id) {
+              // Si no coincide, redirigir
+              return NextResponse.redirect(new URL('/home', request.url));
+          }
+      }
+  }
+
   return NextResponse.next();
 }
 
