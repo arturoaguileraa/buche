@@ -12,11 +12,12 @@ type Bar = {
     description: string;
     imageUrl: string;
     operatingHours: string;
+    owner: {id: string};
 };
 
 const Home = () => {
     const profileData = useProfileData();
-    const [bars, setBars] = useState<Bar[]>([]);
+    const [establishments, setEstablishments] = useState<Bar[]>([]);
     const [limit, setLimit] = useState<number>(12);
     const [offset, setOffset] = useState<number>(5);
     const [loading, setLoading] = useState<boolean>(false);
@@ -24,17 +25,17 @@ const Home = () => {
 
     useEffect(() => {
         // Cargar los primeros bares al inicio
-        fetchBars();
+        fetchEstablishments();
         // Añadir el evento de scroll para cargar más bares al llegar al final de la página
         window.addEventListener('scroll', handleScroll);
         return () => window.removeEventListener('scroll', handleScroll);
     }, [offset, limit]);
 
-    const fetchBars = async () => {
+    const fetchEstablishments = async () => {
         try {
             setLoading(true);
             const response = await api.get(`/establishments/all?limit=${limit}&offset=0`);
-            setBars(response.data);
+            setEstablishments(response.data);
             if (response.data.length < limit) {
                 setHasMore(false);
             }
@@ -42,12 +43,12 @@ const Home = () => {
             setOffset(response.data.length); // Establece el siguiente offset para cargar más bares
             setLoading(false);
         } catch (error) {
-            console.error('Error fetching bars:', error);
+            console.error('Error fetching establishments:', error);
             setLoading(false);
         }
     };
 
-    const fetchMoreBars = async () => {
+    const fetchMoreEstablishments = async () => {
       console.log(!hasMore, loading);
         
       if (!hasMore || loading) return;
@@ -55,10 +56,10 @@ const Home = () => {
         try {
             setLoading(true);
             const response = await api.get(`/establishments/all?limit=${limit}&offset=${offset}`);
-            console.log("ANTES",bars);
+            console.log("ANTES",establishments);
             
-            setBars((prevBars) => [...prevBars, ...response.data]);
-            console.log("DESPUES",bars);
+            setEstablishments((prevEstablishments) => [...prevEstablishments, ...response.data]);
+            console.log("DESPUES",establishments);
             
             if (response.data.length < limit) {
                 setHasMore(false);
@@ -67,14 +68,14 @@ const Home = () => {
             setOffset((prevOffset) => prevOffset + limit); // Incrementar el offset
             setLoading(false);
         } catch (error) {
-            console.error('Error fetching more bars:', error);
+            console.error('Error fetching more establishments:', error);
             setLoading(false);
         }
     };
 
     const handleScroll = () => {
         if (window.innerHeight + document.documentElement.scrollTop >= document.documentElement.offsetHeight - 1 && hasMore) {
-            fetchMoreBars(); // Cargar más bares al llegar al final
+            fetchMoreEstablishments(); // Cargar más bares al llegar al final
         }
     };
 
@@ -87,7 +88,7 @@ const Home = () => {
             <div className="container mx-auto">
                 <h1 className="text-3xl font-bold text-center my-8">Bares Disponibles</h1>
                 <div className="flex flex-wrap justify-center">
-                    {bars.map(bar => (
+                    {establishments.map(bar => (
                         <BarCard
                             key={bar.id}
                             id={bar.id}
@@ -98,39 +99,48 @@ const Home = () => {
                             isOwner={false}
                         />
                     ))}
-                    {loading && <p>Cargando más bares...</p>}
-                    {!hasMore && <p>No hay más bares disponibles.</p>}
+                    {loading && <p>Cargando más establecimientos...</p>}
+                    {!hasMore && <p>No hay más establecimientos disponibles.</p>}
                 </div>
             </div>
         </div>
     );
 
-    const renderOwnerView = () => (
-        <div className="flex flex-col items-center min-h-screen">
-            <div className="flex flex-col items-center justify-between w-full p-4 bg-gray-100 border-b">
-                <h1 className="text-xl font-bold text-gray-700">Bienvenido, {profileData?.name}</h1>
-                <div className="flex justify-between w-full">
-                    <Button onClick={handleAddEstablishment}>+ Añadir Establecimiento</Button>
-                    <Button onClick={() => {setHasMore(true); setBars([]); fetchBars()}}>Recargar Bares</Button>
-                </div>
-            </div>
-            <div className="flex flex-wrap justify-center mt-8">
-                {bars.map(bar => (
-                    <BarCard
-                        key={bar.id}
-                        id={bar.id}
-                        name={bar.name}
-                        description={bar.description}
-                        imageUrl={'https://via.placeholder.com/400x300'}
-                        operatingHours={bar.operatingHours}
-                        isOwner={true}
-                    />
-                ))}
-                {loading && <p>Cargando más bares...</p>}
-                {!hasMore && <p>No hay más bares disponibles.</p>}
-            </div>
-        </div>
-    );
+    const renderOwnerView = () => {
+      // Filtrar los bares que pertenecen al propietario actual
+      const ownerestablishments = establishments.filter(bar => bar.owner.id === profileData?.id);
+  
+      return (
+          <div className="flex flex-col items-center min-h-screen">
+              <div className="flex flex-col items-center justify-between w-full p-4 bg-gray-100 border-b">
+                  <h1 className="text-xl font-bold text-gray-700">Bienvenido, {profileData?.name}</h1>
+                  <div className="flex justify-between w-full">
+                      <Button onClick={handleAddEstablishment}>+ Añadir Establecimiento</Button>
+                      <Button onClick={() => fetchEstablishments()}>Recargar Establecimientos</Button>
+                  </div>
+              </div>
+              <div className="flex flex-wrap justify-center mt-8"> 
+              <h1 className="text-xl font-bold text-gray-700">Tus establecimientos</h1>
+                  {ownerestablishments.length > 0 ? (
+                      ownerestablishments.map(bar => (
+                          <BarCard
+                              key={bar.id}
+                              id={bar.id}
+                              name={bar.name}
+                              description={bar.description}
+                              imageUrl={'https://via.placeholder.com/400x300'}
+                              operatingHours={bar.operatingHours}
+                              isOwner={true}
+                          />
+                      ))
+                  ) : (
+                      <p>No tienes establecimientos disponibles.</p>
+                  )}
+              </div>
+          </div>
+      );
+  };
+  
 
     const renderWaiterView = () => (
         <div className="flex min-h-screen flex-col items-center justify-center bg-cover">
