@@ -67,7 +67,7 @@ const AddProductForm: React.FC = () => {
   };
 
   const handleCancel = () => {
-    window.location.href = '/home';
+    window.location.href = `/e/${establishmentId}`;
   };
 
   return (
