@@ -45,12 +45,12 @@ const EditEstablishmentPage: React.FC = () => {
 
     console.log(formData);
   
-    // Clonar formData y eliminar 'id' si está presente
+    // Clonar formData y eliminar 'id' y 'owner' si está presente
     const { id, owner, ...dataToSubmit } = formData;
   
     try {
       await api.patch(`/establishments/${id}`, dataToSubmit);
-      router.push(`/`);
+      router.push(`/e/${id}`);
     } catch (error) {
       console.error('Error updating establishment:', error);
     }
