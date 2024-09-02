@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, NotFoundException, Patch } from '@nestjs/common';
 import { ProductsService } from './products.service';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
@@ -23,5 +23,24 @@ export class ProductsController {
     return this.productsService.findAllByEstablishment(id);
   }
 
-    // Más métodos para actualizar, eliminar, etc.
+  @Patch(':id')
+  async update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
+    const product = await this.productsService.update(+id, updateProductDto);
+    if (!product) {
+      throw new NotFoundException('Product not found');
+    }
+    return product;
+  }
+
+  @Delete(':id')
+  async remove(@Param('id') id: string) {
+      const deleteResult = await this.productsService.remove(+id);
+      
+      if (deleteResult.affected === 0) {
+          throw new NotFoundException('Product not found');
+      }
+
+      return { message: 'Product deleted successfully' };
+  }
+
 }
