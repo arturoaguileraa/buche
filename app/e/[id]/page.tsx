@@ -136,10 +136,12 @@ const EstablishmentPage: React.FC = () => {
         {filteredProducts.map(product => (
           <ProductCard
             key={product.id}
+            id={product.id}
             name={product.name}
             description={product.description}
             price={product.price}
             availability={product.availability}
+            isOwner={canEditOrAddProduct}
           />
         ))}
       </div>
