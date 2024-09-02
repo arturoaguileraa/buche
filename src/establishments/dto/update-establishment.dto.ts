@@ -18,7 +18,6 @@ export class UpdateEstablishmentDto {
   type?: string;
 
   @IsOptional()
-  @IsNumber()
   capacity?: number;
 
   @IsOptional()
@@ -30,7 +29,7 @@ export class UpdateEstablishmentDto {
   email?: string;
 
   @IsOptional()
-  @IsUrl()
+  @IsString()
   website?: string;
 
   @IsOptional()

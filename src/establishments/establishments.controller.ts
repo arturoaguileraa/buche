@@ -10,7 +10,7 @@ import { Establishment } from './entities/establishment.entity';
 @Controller('establishments')
 export class EstablishmentsController {
     constructor(private readonly establishmentsService: EstablishmentsService) {}
-
+    
     @UseGuards(JwtGuard)
     @Post()
     async create(@Body() createEstablishmentDto: CreateEstablishmentDto, @GetUser() user: User) {
@@ -24,17 +24,17 @@ export class EstablishmentsController {
     ): Promise<Establishment[]> {
         return this.establishmentsService.findAll({ limit, offset });
     }
-
+    
     @Get('owner')
     async getEstablishmentsByOwner(@GetUser() user: User) {
-      return this.establishmentsService.findByOwner(user.id);
+        return this.establishmentsService.findByOwner(user.id);
     }
-
+    
     @Get(':id')
     findOne(@Param('id') id: number) {
         return this.establishmentsService.findOne(id);
     }
-
+    
     @Patch(':id')
     update(@Param('id') id: number, @Body() updateEstablishmentDto: UpdateEstablishmentDto) {
         return this.establishmentsService.update(id, updateEstablishmentDto);
