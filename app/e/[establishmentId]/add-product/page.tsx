@@ -13,7 +13,7 @@ interface ProductCategory {
 }
 
 const AddProductForm: React.FC = () => {
-    const { id: establishmentId } = useParams<{ id: string }>();
+    const { establishmentId } = useParams<{ establishmentId: string }>();
   const [name, setName] = useState('');
   const [currentPrice, setCurrentPrice] = useState('');
   const [description, setDescription] = useState('');

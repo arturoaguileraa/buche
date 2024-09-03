@@ -5,7 +5,7 @@ import { useParams, useRouter } from 'next/navigation';
 import api from '@/app/api/api';
 
 const EditEstablishmentPage: React.FC = () => {
-  const { id } = useParams();
+  const { establishmentId : id } = useParams();
   const router = useRouter();
   const [formData, setFormData] = useState({
     id: id,
