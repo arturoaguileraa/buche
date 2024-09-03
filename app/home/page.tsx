@@ -114,9 +114,8 @@ const Home = () => {
           <div className="flex flex-col items-center min-h-screen">
               <div className="flex flex-col items-center justify-between w-full p-4 bg-gray-100 border-b">
                   <h1 className="text-xl font-bold text-gray-700">Bienvenido, {profileData?.name}</h1>
-                  <div className="flex justify-between w-full">
+                  <div className="flex justify-center w-full">
                       <Button onClick={handleAddEstablishment}>+ Añadir Establecimiento</Button>
-                      <Button onClick={() => fetchEstablishments()}>Recargar Establecimientos</Button>
                   </div>
               </div>
               <div className="flex flex-wrap justify-center mt-8"> 
