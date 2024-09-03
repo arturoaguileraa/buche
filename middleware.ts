@@ -61,12 +61,12 @@ export async function middleware(request: NextRequestWithAuth) {
   }
 
     // Restricciones para rutas específicas
-    if (request.nextUrl.pathname.match(/^\/e\/\d+\/(add-product|edit)$/)) {
+    if (request.nextUrl.pathname.match(/^\/e\/\d+\/(add-product|edit|tables)$/)) {
       const establishmentId = request.nextUrl.pathname.split('/')[2];
 
       if (userRole !== 'ADMIN' && userRole !== 'OWNER') {
           // Si el rol no es ADMIN ni OWNER, redirigir
-          return NextResponse.redirect(new URL('/home', request.url));
+          return NextResponse.redirect(new URL(`/e/${establishmentId}`, request.url));
       }
 
       if (userRole === 'OWNER') {
