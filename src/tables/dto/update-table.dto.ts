@@ -1,6 +1,14 @@
+import { IsOptional, IsString } from "class-validator";
+
 // update-table.dto.ts
 export class UpdateTableDto {
-    number?: number;
+    @IsOptional()
     capacity?: number;
-    status?: string;
+
+    @IsOptional()
+    @IsString()
+    status?: 'available' | 'occupied' | 'reserved';
+
+    @IsOptional()
+    userId?: number;
 }

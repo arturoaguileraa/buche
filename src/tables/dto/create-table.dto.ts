@@ -1,6 +1,6 @@
+import { IsInt, IsNotEmpty } from "class-validator";
+
 export class CreateTableDto {
-    number: number;
-    capacity: number;
-    status: 'available' | 'occupied' | 'reserved';
-    // Otros campos necesarios para la creación
-}
+    @IsNotEmpty()
+    establishmentId: number; // Parte de la PK compuesta
+  }

@@ -1,5 +1,5 @@
 // update-product.dto.ts
-import { IsOptional, IsString, IsNumber, IsEmail, IsUrl, IsBoolean } from 'class-validator';
+import { IsOptional, IsString, IsBoolean } from 'class-validator';
 
 
 export class UpdateProductDto {

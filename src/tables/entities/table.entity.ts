@@ -1,18 +1,17 @@
 import { Establishment } from 'src/establishments/entities/establishment.entity';
 import { Order } from 'src/orders/entities/order.entity';
-import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
-// Importar la entidad Order si es necesario para la relación
-// import { Order } from './order.entity';
+import { User } from 'src/users/entities/user.entity';
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn, PrimaryColumn } from 'typeorm';
 
 @Entity()
 export class Table {
-  @PrimaryGeneratedColumn()
-  id: number;
-
-  @Column()
+  @PrimaryColumn() // Usa PrimaryColumn en lugar de PrimaryGeneratedColumn
   number: number;
 
-  @Column()
+  @PrimaryColumn() // También establece el establishmentId como parte de la PK compuesta
+  establishmentId: number;
+
+  @Column({ nullable: true })
   capacity: number;
 
   @Column({
@@ -25,6 +24,10 @@ export class Table {
   // Ejemplo de relación OneToMany con la entidad Order (si es aplicable)
   @OneToMany(() => Order, order => order.table)
   orders: Order[];
+
+  @ManyToOne(() => User, user => user.tables, { nullable: true }) // Relación con usuario
+  @JoinColumn({ name: 'userId' })
+  user: User;  // Relación con User
 
   @ManyToOne(() => Establishment, establishment => establishment.tables)
   @JoinColumn({ name: 'establishmentId' })

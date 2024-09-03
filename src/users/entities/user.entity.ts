@@ -1,6 +1,7 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
 import { Order } from 'src/orders/entities/order.entity';
 import { Establishment } from 'src/establishments/entities/establishment.entity';
+import { Table } from 'src/tables/entities/table.entity';
 
 @Entity()
 export class User {
@@ -24,5 +25,8 @@ export class User {
 
   @OneToMany(() => Establishment, establishment => establishment.owner)
   establishments: Establishment[];
+
+  @OneToMany(() => Table, table => table.user)
+  tables: Table[];
 }
 
