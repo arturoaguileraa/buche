@@ -65,6 +65,38 @@ const TablePage = () => {
     }
     
   };
+
+  const handleSubmitOrder = async (totalAmount : number) => {
+    try {
+      // Fecha y hora actual
+      const currentDate = new Date().toISOString();
+  
+      // Crear objeto de datos para el nuevo pedido
+      const newOrder = {
+        total: totalAmount,
+        date: currentDate,
+        establishmentId: Number(establishmentId),
+        tableId: Number(tableId),  // tableId debería estar definido
+        userId: profileData?.id,  // profileData.id contiene el ID del usuario
+      };
+  
+      // Hacer una solicitud POST al servidor para crear el pedido
+      const response = await api.post('/orders', newOrder);
+  
+      // Si la solicitud es exitosa, devuelve el id del pedido
+      if (response.status === 201) {
+        const orderId = response.data.id; // Obtener el id del pedido creado
+        console.log('Pedido creado con éxito. ID del pedido:', orderId);
+        return orderId; // Retorna el ID del pedido
+      } else {
+        console.error('Error al crear el pedido. Código de estado:', response.status);
+      }
+    } catch (error) {
+      console.error('Error creando el pedido:', error);
+      alert('Error al crear el pedido');
+    }
+  };
+  
   
 
   if (tableStatus === 'available') {
@@ -81,6 +113,7 @@ const TablePage = () => {
       if (user?.id !== profileData?.id) {
           return <p>Lo siento, esta mesa ya está ocupada.</p>;
       } else if (sessionStarted || `${user?.id}` !== profileData?.id) {
+        
           return (
             <div className="container mx-auto py-8">
                 <p>Bienvenido de nuevo a tu sesión.</p>
@@ -88,8 +121,16 @@ const TablePage = () => {
                 <Button onClick={handleEndSession} className="bg-red-500 text-white">
                     Finalizar Sesión
                 </Button>
+                <Button onClick={window.location.reload} className="secondary">
+                    Ver mis pedidos
+                </Button>
                 </div>
-                <Menu establishmentId={+establishmentId} canEditOrAddProduct={false} inSession={true}/>
+                <Menu 
+                  establishmentId={+establishmentId} 
+                  canEditOrAddProduct={false} 
+                  inSession={true}
+                  handleSubmitOrder={handleSubmitOrder}
+                />
             </div>
           );
       }

@@ -91,7 +91,9 @@ const EstablishmentPage: React.FC = () => {
           </div>
         </div>
       )}
-      <Menu establishmentId={Number(id)} canEditOrAddProduct={canEditOrAddProduct} inSession={false}/>
+      <Menu establishmentId={Number(id)} canEditOrAddProduct={canEditOrAddProduct} inSession={false} totalAmount={0} handleSubmitOrder={function (): void {
+        throw new Error('Function not implemented.');
+      } }/>
     </div>
   );
 };
