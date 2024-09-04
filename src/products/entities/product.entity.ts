@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { Establishment } from 'src/establishments/entities/establishment.entity';
 import { ProductCategory } from './product-category.entity';
-import { OrderProduct } from 'src/order-product/entities/order-product.entity';
+import { OrderProduct } from 'src/orders/entities/order-product.entity';
 
 @Entity()
 export class Product {

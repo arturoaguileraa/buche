@@ -1,7 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, CreateDateColumn, JoinColumn } from 'typeorm';
-import { User } from 'src/users/entities/user.entity';
-import { Table } from 'src/tables/entities/table.entity';
-import { OrderProduct } from 'src/order-product/entities/order-product.entity';
+import { Table } from "src/tables/entities/table.entity";
+import { User } from "src/users/entities/user.entity";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { OrderProduct } from "./order-product.entity";
 
 @Entity()
 export class Order {
@@ -15,20 +15,25 @@ export class Order {
   })
   status: 'pending' | 'completed' | 'cancelled';
 
-  @Column()
+  @Column({ type: 'decimal', precision: 5, scale: 2 })
   total: number;
 
-  @CreateDateColumn()
-  date: Date;
+  @Column()
+  date: string;
 
-  @ManyToOne(() => Table)
-  @JoinColumn({ name: 'table_id' })
+  @ManyToOne(() => Table, table => table.orders)
+  @JoinColumn([
+    { name: 'number', referencedColumnName: 'number' },
+    { name: 'establishmentId', referencedColumnName: 'establishmentId' }
+  ])
   table: Table;
 
   @ManyToOne(() => User, user => user.orders)
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @OneToMany(() => OrderProduct, orderProduct => orderProduct.order)
+  @OneToMany(() => OrderProduct, orderProduct => orderProduct.order, {
+    cascade: true,
+  })
   orderProducts: OrderProduct[];
 }

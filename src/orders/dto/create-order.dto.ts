@@ -1,6 +1,18 @@
-// Asegúrate de que el DTO solo contenga los campos necesarios y de que coincidan los tipos
+import { IsNumber, IsString } from 'class-validator';
+
 export class CreateOrderDto {
-  status: 'pending' | 'completed' | 'cancelled';
+  @IsNumber()
+  userId: number;
+
+  @IsNumber()
+  establishmentId: number; // Establecimiento asociado
+
+  @IsNumber()
   total: number;
-  // Otros campos necesarios para la creación
+
+  @IsString()
+  date: string;
+  
+  @IsNumber()
+  tableId: number; // ID de la mesa
 }
