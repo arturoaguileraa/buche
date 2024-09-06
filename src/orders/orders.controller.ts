@@ -27,6 +27,11 @@ export class OrdersController {
     return this.ordersService.getOrdersByTable(establishmentId, tableId);
   }
 
+  @Get('sessions/:sessionId')
+  async getOrdersBySession(@Param('sessionId') sessionId: number) {
+    return this.ordersService.findOrdersBySession(sessionId);
+  }
+  
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.ordersService.findOne(+id);

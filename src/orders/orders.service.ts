@@ -9,6 +9,7 @@ import { User } from '../users/entities/user.entity';
 import { OrderProduct } from './entities/order-product.entity';
 import { CreateOrderProductDto } from './dto/create-order-product.dto';
 import { Product } from 'src/products/entities/product.entity';
+import { Session } from 'src/sessions/entities/session.entity';
 
 @Injectable()
 export class OrdersService {
@@ -23,11 +24,13 @@ export class OrdersService {
     private readonly orderProductRepository: Repository<OrderProduct>,
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
+    @InjectRepository(Session) // Repositorio para la sesión
+    private readonly sessionRepository: Repository<Session>,
   ) {}
 
   // Función para crear una orden
   async create(createOrderDto: CreateOrderDto): Promise<Order> {
-    const { userId, establishmentId, tableId, total, date } = createOrderDto;
+    const { userId, establishmentId, tableId, total, date, sessionId } = createOrderDto;
 
     // Buscar la mesa por number y establishmentId
     const table = await this.tableRepository.findOne({
@@ -46,17 +49,25 @@ export class OrdersService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
+
+    // Buscar la sesión asociada
+    const session = await this.sessionRepository.findOne({
+      where: { id: sessionId },
+    });
+
+    if (!session) {
+      throw new NotFoundException(`No se encontró la sesión con ID ${sessionId}`);
+    }
     // Crear la orden
     const order = this.orderRepository.create({
       user,
       table,
       total,
       status: 'pending',
-      date
+      date,
+      session
     });
-    console.log(order);
     
-
     return this.orderRepository.save(order);
   }
 
@@ -144,5 +155,12 @@ async getOrdersByTable(establishmentId: number, tableId: number): Promise<Order[
   async remove(id: number): Promise<void> {
     const order = await this.findOne(id);
     await this.orderRepository.remove(order);
+  }
+
+  async findOrdersBySession(sessionId: number): Promise<Order[]> {
+    return this.orderRepository.find({
+      where: { session: { id: sessionId } }, // Asumiendo que tienes una relación entre pedidos y sesiones
+      relations: ['orderProducts'], // Cargar los productos del pedido
+    });
   }
 }

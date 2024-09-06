@@ -8,6 +8,7 @@ import { TablesModule } from './tables/tables.module';
 import { AuthModule } from './auth/model/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { ProductCategoriesModule } from './products/product-categories.module';
+import { SessionModule } from './sessions/sessions.module';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { ProductCategoriesModule } from './products/product-categories.module';
     ProductsModule,
     TablesModule,
     AuthModule,
+    SessionModule
   ],
   controllers: [],
   providers: [],

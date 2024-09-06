@@ -1,7 +1,8 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany } from 'typeorm';
 import { Order } from 'src/orders/entities/order.entity';
 import { Establishment } from 'src/establishments/entities/establishment.entity';
 import { Table } from 'src/tables/entities/table.entity';
+import { Session } from 'src/sessions/entities/session.entity';
 
 @Entity()
 export class User {
@@ -28,5 +29,8 @@ export class User {
 
   @OneToMany(() => Table, table => table.user)
   tables: Table[];
+
+  @OneToMany(() => Session, session => session.user)
+  sessions: Session[];
 }
 

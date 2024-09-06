@@ -15,4 +15,7 @@ export class CreateOrderDto {
   
   @IsNumber()
   tableId: number; // ID de la mesa
+
+  @IsNumber()
+  sessionId: number;
 }

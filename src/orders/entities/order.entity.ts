@@ -2,6 +2,7 @@ import { Table } from "src/tables/entities/table.entity";
 import { User } from "src/users/entities/user.entity";
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { OrderProduct } from "./order-product.entity";
+import { Session } from "src/sessions/entities/session.entity";
 
 @Entity()
 export class Order {
@@ -36,4 +37,7 @@ export class Order {
     cascade: true,
   })
   orderProducts: OrderProduct[];
+
+  @ManyToOne(() => Session, session => session.orders)
+  session: Session;
 }
