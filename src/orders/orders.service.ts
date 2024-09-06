@@ -163,4 +163,18 @@ async getOrdersByTable(establishmentId: number, tableId: number): Promise<Order[
       relations: ['orderProducts'], // Cargar los productos del pedido
     });
   }
+
+  async getOrdersByEstablishment(establishmentId: number): Promise<Order[]> {
+    return this.orderRepository.find({
+      where: { table: { establishmentId }, 
+     },
+      relations: ['table', 'orderProducts', 'orderProducts.product'], // Incluye la relación con la tabla para obtener la información del establecimiento
+    });
+  }
+
+  async delete(id: number): Promise<boolean> {
+    const result = await this.orderRepository.delete(id);
+    return result.affected > 0;
+  }
+
 }

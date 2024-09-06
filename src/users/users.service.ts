@@ -21,11 +21,11 @@ export class UsersService {
   ) {}
 
   async findOneByEmail(email: string): Promise<User | undefined> {
-    return this.usersRepository.findOne({ where: { email } });
+    return this.usersRepository.findOne({ where: { email }, relations: ['establishment'], });
   }
 
   async findOneById(id: number): Promise<User | undefined> {
-    return this.usersRepository.findOne({ where: { id } });
+    return this.usersRepository.findOne({ where: { id }, relations: ['establishment'], });
   }
 
   async create(createUserDto: CreateUserDto): Promise<User> {
