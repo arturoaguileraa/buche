@@ -6,7 +6,6 @@ import { Button } from "./button";
 import BackButton from "./backbutton";
 import { useProfileData } from "@/app/utils/jwtUtils";
 import Link from "next/link";
-import SessionButton from "./SessionButton";
 
 const Header = () => {
   const profileData = useProfileData();
