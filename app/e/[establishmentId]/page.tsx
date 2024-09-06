@@ -46,6 +46,10 @@ const EstablishmentPage: React.FC = () => {
     window.location.href = `/e/${id}/add-product`;
   };
 
+  const handleAddWaiter = () => {
+    window.location.href = `/e/${id}/add-waiter`;
+  };
+
   const handleEditEstablishment = () => {
     window.location.href = `/e/${id}/edit`;
   };
@@ -81,17 +85,21 @@ const EstablishmentPage: React.FC = () => {
 
       {canEditOrAddProduct && (
         <div className='flex w-full flex-col'>
-          <div className="flex w-full justify-around m-1">
-            <Button onClick={handleEditEstablishment}>Editar establecimiento</Button>
-            <Button onClick={handleAddProduct}>+ Añadir producto</Button>
-          </div>
-          <div className="flex w-full justify-around m-1">
+          <div className="flex w-full justify-between m-1">
             <Button onClick={() => (router.push(`/e/${id}/tables`))}>Ver mesas</Button>
+            <Button onClick={handleEditEstablishment}>Editar establecimiento</Button>
+            
+          </div>
+          <div className="flex w-full justify-between m-1">
             <Button onClick={handleAddTable}>+ Añadir mesa</Button>
+            <Button onClick={handleAddWaiter}>+ Añadir camarero/a</Button>
+          </div>
+          <div className="flex w-full justify-center m-1">
+            <Button onClick={handleAddProduct}>+ Añadir producto</Button>
           </div>
         </div>
       )}
-      <Menu establishmentId={Number(id)} canEditOrAddProduct={canEditOrAddProduct} inSession={false} totalAmount={0} handleSubmitOrder={function (): void {
+      <Menu establishmentId={Number(id)} canEditOrAddProduct={canEditOrAddProduct} inSession={false} handleSubmitOrder={function (): void {
         throw new Error('Function not implemented.');
       } }/>
     </div>
