@@ -118,8 +118,8 @@ const Home = () => {
                       <Button onClick={handleAddEstablishment}>+ Añadir Establecimiento</Button>
                   </div>
               </div>
-              <div className="flex flex-wrap justify-center mt-8"> 
-              <h1 className="text-xl font-bold text-gray-700">Tus establecimientos</h1>
+              <div className="flex flex-col justify-center mt-8"> 
+              <h1 className="flex text-xl justify-center font-bold text-gray-700">Tus establecimientos</h1>
                   {ownerestablishments.length > 0 ? (
                       ownerestablishments.map(bar => (
                           <BarCard
@@ -141,17 +141,21 @@ const Home = () => {
   };
   
 
-    const renderWaiterView = () => (
+    const renderWaiterView = () => {
+        window.location.href = `/e/${profileData?.establishment?.id}`;
+        return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-cover">
             <div className="container mx-auto">
-                <h1 className="text-3xl font-bold text-center my-8">Panel de Camarero</h1>
+                <h1 className="text-3xl font-bold text-center mt-8">Tu Panel de Camarero</h1>
+                <h2 className="text-xl font-bold text-center my-3">Establecimiento: {profileData?.establishment?.name}</h2>
                 <div className="flex flex-wrap justify-center space-y-4">
-                    <Button className="w-full" onClick={() => window.location.href = '/c/ordenes'}>Ver Ordenes</Button>
-                    <Button className="w-full" onClick={() => window.location.href = '/c/mesas'}>Ver Mesas</Button>
+                    <Button className="w-full" onClick={() => window.location.href = `/e/${profileData?.establishment?.id}`}>Ver Establecimiento</Button>
+                    <Button className="w-full" onClick={() => window.location.href = `/e/${profileData?.establishment?.id}/tables`}>Ver Mesas</Button>
                 </div>
             </div>
         </div>
-    );
+        );
+    }
 
     return (
         <div>

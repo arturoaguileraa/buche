@@ -28,7 +28,7 @@ const EstablishmentPage: React.FC = () => {
   const [establishment, setEstablishment] = useState<Establishment | null>(null);
 
   const canEditOrAddProduct = profileData?.roles === 'ADMIN' || (profileData?.roles === 'OWNER' && establishment?.owner.id === profileData.id);
-
+  const isWaiter = profileData?.establishment?.id == id;
   useEffect(() => {
     const fetchEstablishmentData = async () => {
       try {
@@ -54,6 +54,10 @@ const EstablishmentPage: React.FC = () => {
     window.location.href = `/e/${id}/edit`;
   };
 
+  const handleViewOrders = () => {
+    window.location.href = `/e/${id}/orders`;
+  }
+
   const handleAddTable = async () => {
     try {
       const response = await api.post(`/tables`, { establishmentId: id });
@@ -66,6 +70,7 @@ const EstablishmentPage: React.FC = () => {
       alert('Hubo un problema al añadir la mesa');
     }
   };
+
 
   return (
     <div className="container mx-auto py-8">
@@ -83,22 +88,26 @@ const EstablishmentPage: React.FC = () => {
         </div>
       )}
 
-      {canEditOrAddProduct && (
+      {(isWaiter || canEditOrAddProduct) && (
         <div className='flex w-full flex-col'>
-          <div className="flex w-full justify-between m-1">
+          <div className="flex w-full justify-around m-1">
             <Button onClick={() => (router.push(`/e/${id}/tables`))}>Ver mesas</Button>
-            <Button onClick={handleEditEstablishment}>Editar establecimiento</Button>
-            
-          </div>
-          <div className="flex w-full justify-between m-1">
             <Button onClick={handleAddTable}>+ Añadir mesa</Button>
+          </div>
+          {canEditOrAddProduct && (
+        <><div className="flex w-full justify-around m-1">
+            <Button onClick={handleAddProduct}>+ Añadir producto</Button>
             <Button onClick={handleAddWaiter}>+ Añadir camarero/a</Button>
           </div>
-          <div className="flex w-full justify-center m-1">
-            <Button onClick={handleAddProduct}>+ Añadir producto</Button>
+          <div className="flex w-full justify-around m-1">
+            <Button onClick={handleEditEstablishment}>Editar establecimiento</Button>
+            <Button onClick={handleViewOrders}>Ver pedidos</Button>
           </div>
+        </>
+        )}
         </div>
       )}
+      
       <Menu establishmentId={Number(id)} canEditOrAddProduct={canEditOrAddProduct} inSession={false} handleSubmitOrder={function (): void {
         throw new Error('Function not implemented.');
       } }/>

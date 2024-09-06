@@ -61,7 +61,7 @@ export async function middleware(request: NextRequestWithAuth) {
   }
 
     // Restricciones para rutas específicas
-    if (request.nextUrl.pathname.match(/^\/e\/\d+\/(add-product|edit|tables)$/)) {
+    if (request.nextUrl.pathname.match(/^\/e\/\d+\/(add-product|edit|orders|add-waiter)$/)) {
       const establishmentId = request.nextUrl.pathname.split('/')[2];
 
       if (userRole !== 'ADMIN' && userRole !== 'OWNER') {
@@ -79,6 +79,32 @@ export async function middleware(request: NextRequestWithAuth) {
               return NextResponse.redirect(new URL('/home', request.url));
           }
       }
+  }
+
+  // Restricciones para rutas específicas
+  if (request.nextUrl.pathname.match(/^\/e\/\d+\/(tables)$/)) {
+    const establishmentId = request.nextUrl.pathname.split('/')[2];
+
+    if (userRole === 'OWNER') {
+        // Verificar si el ownerId coincide con el del establecimiento
+        const response = await fetch(`http://localhost:3001/establishments/${establishmentId}`);
+        const establishment = await response.json();
+
+        if (establishment.owner.id !== user.id) {
+            // Si no coincide, redirigir
+            return NextResponse.redirect(new URL('/home', request.url));
+        }
+    }
+
+    if(userRole === 'WAITER'){
+      // Verificar si el establishment.id del camarero coincide con el establishmentId de la ruta
+      const waiterEstablishmentId = user.establishment?.id; // Suponiendo que ya tienes la información del usuario (incluido el establecimiento)
+        
+      if (!waiterEstablishmentId || waiterEstablishmentId != establishmentId) {
+        // Si no tiene un establecimiento asignado o no coincide, redirigir
+        return NextResponse.redirect(new URL('/home', request.url));
+      }
+    }
   }
 
   return NextResponse.next();

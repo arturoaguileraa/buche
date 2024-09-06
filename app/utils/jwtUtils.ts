@@ -1,12 +1,18 @@
 import { useSession } from 'next-auth/react';
 import jwt from 'jsonwebtoken';
 
+export interface Establishment {
+  id: string;
+  name: string;
+}
+
 export interface ProfileData {
   email: string;
   name: string;
   image: string;
   roles: string;
   id: string;
+  establishment?: Establishment
 }
 
 export const useProfileData = (): ProfileData | null => {

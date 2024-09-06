@@ -52,7 +52,11 @@ const TableCard: React.FC<TableCardProps> = ({ table, onDelete, onEdit }) => {
     <>
     <div onClick={handleClick} className="cursor-pointer border rounded-lg shadow-md p-4 m-2">
       <h3 className="text-xl font-semibold mb-2">Mesa {table.number}</h3>
-      <p>Estado: {table.status}</p>
+      <p>Estado: 
+        {table.status === 'available'&& ' Disponible'}
+        {table.status === 'occupied' && ' Sesión empezada. Ocupada'}
+        {table.status === 'reserved' && ' Reservada'}
+      </p>
       <p>Capacidad: {table.capacity || 'N/A'}</p>
       <div className="flex justify-end mt-4">
         <button

@@ -64,7 +64,7 @@ const Header = () => {
       case "WAITER":
       case "OWNER":
         return (
-          <div className="bg-white rounded-lg shadow-lg absolute right-0 mt-2 w-48">
+          <div className="bg-white rounded-lg shadow-lg absolute right-0 mt-6 w-48">
             <Link href="/sessions/active">
               <p className="cursor-pointer hover:bg-gray-100 p-3 rounded">Sesiones Activas</p>
             </Link>
@@ -78,7 +78,7 @@ const Header = () => {
         );
       case "ADMIN":
         return (
-          <div className="bg-white rounded-lg shadow-lg absolute right-0 mt-2 w-48">
+          <div className="bg-white rounded-lg shadow-lg absolute right-0 mt-6 w-48">
             <p
               className="cursor-pointer hover:bg-gray-100 p-3 rounded"
               onClick={() => handleOpenPopup()}
@@ -126,7 +126,7 @@ const Header = () => {
             </div>
           )}
           {showPopup && (
-                        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+                        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
                             <div className="bg-white p-6 rounded shadow-lg">
                                 <p>¿Estás seguro que quieres cerrar sesión?</p>
                                 <div className="mt-4 flex justify-end">

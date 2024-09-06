@@ -86,7 +86,7 @@ const AddWaiterPage = () => {
           ))}
         </ul>
       ) : (
-        <p className="text-gray-600">No se encontraron camareros.</p>
+        <p className="text-gray-600">No se encontraron camareros disponibles.</p>
       )}
     </div>
   );
