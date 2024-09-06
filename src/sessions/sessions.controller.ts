@@ -44,12 +44,7 @@ export class SessionController {
     @Param('establishmentId') establishmentId: number,
     @Param('tableId') tableNumber: number,
   ) {
-    console.log("Entro", establishmentId, tableNumber);
-    
     const session = await this.sessionService.findActiveSession(establishmentId, tableNumber);
-
-    console.log("Sesion:", session);
-    
     return session;
   }
 
