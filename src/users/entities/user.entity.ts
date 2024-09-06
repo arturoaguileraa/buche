@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, ManyToMany, ManyToOne, JoinColumn } from 'typeorm';
 import { Order } from 'src/orders/entities/order.entity';
 import { Establishment } from 'src/establishments/entities/establishment.entity';
 import { Table } from 'src/tables/entities/table.entity';
@@ -32,5 +32,9 @@ export class User {
 
   @OneToMany(() => Session, session => session.user)
   sessions: Session[];
+
+  @ManyToOne(() => Establishment, establishment => establishment.waiters, { nullable: true })
+  @JoinColumn({ name: 'establishmentId' })
+  establishment: Establishment;
 }
 

@@ -51,4 +51,7 @@ export class Establishment {
 
   @ManyToOne(() => User, user => user.establishments, { nullable: false })
   owner: User;
+
+  @OneToMany(() => User, user => user.establishment)
+  waiters: User[];
 }

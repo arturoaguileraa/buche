@@ -41,6 +41,19 @@ export class EstablishmentsService {
     });
   }
 
+  async addWaiter(establishmentId: number, waiterId: number) {
+    const establishment = await this.establishmentRepository.findOne({ where: { id: establishmentId } });
+    const waiter = await this.userRepository.findOne({ where: { id: waiterId, role: 'WAITER', establishment: null } });
+  
+    if (!establishment || !waiter) {
+      throw new Error('Establishment or Waiter not found');
+    }
+  
+    waiter.establishment = establishment;
+    return this.userRepository.save(waiter); // Actualiza el camarero con el establecimiento
+  }
+  
+
   async findOne(id: number): Promise<Establishment> {
     return this.establishmentRepository.findOne({ relations: ['owner'], where: { id } });
   }

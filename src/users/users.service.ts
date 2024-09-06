@@ -36,4 +36,13 @@ export class UsersService {
   async findAllUsers(): Promise<User[]> {
     return this.usersRepository.find();
   }
+
+  async findWaitersWithoutEstablishment() {
+    return this.usersRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.establishment', 'establishment')
+      .where('user.role = :role', { role: 'WAITER' })
+      .andWhere('user.establishmentId IS NULL') // Asegura que el establecimiento sea nulo
+      .getMany();
+  }
 }

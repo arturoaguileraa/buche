@@ -16,6 +16,15 @@ export class EstablishmentsController {
     async create(@Body() createEstablishmentDto: CreateEstablishmentDto, @GetUser() user: User) {
         return this.establishmentsService.create(createEstablishmentDto, user.id);
     }
+
+    @Post(':id/add-waiter')
+    async addWaiterToEstablishment(
+    @Param('id') establishmentId: number,
+    @Body() { waiterId }: { waiterId: number }
+    ) {
+    return this.establishmentsService.addWaiter(establishmentId, waiterId);
+    }
+
     
     @Get('all')
     async findAll(

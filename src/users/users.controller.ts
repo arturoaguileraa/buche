@@ -13,6 +13,11 @@ export class UsersController {
     return this.userService.findAllUsers();
   }
 
+  @Get('waiters-without-establishment')
+  async getWaitersWithoutEstablishment() {
+    return this.userService.findWaitersWithoutEstablishment();
+  }
+
   // Ruta para obtener un usuario por ID
   @Get(':id')
   findUserById(@Param('id') id: number): Promise<User> {
@@ -24,4 +29,6 @@ export class UsersController {
   createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.userService.create(createUserDto);
   }
+
+
 }
