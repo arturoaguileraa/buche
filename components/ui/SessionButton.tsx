@@ -24,7 +24,7 @@ export default function SessionButton() {
         <>
             {session?.user ? (
                 <>
-                    <Button variant="destructive" onClick={handleOpenPopup}>Cerrar sesión</Button>
+                    <Button variant="destructive" onClick={handleOpenPopup} className='ml-2 mr-2'>Cerrar sesión</Button>
                     {showPopup && (
                         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
                             <div className="bg-white p-6 rounded shadow-lg">

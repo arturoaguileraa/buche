@@ -86,7 +86,7 @@ const Home = () => {
     const renderClientView = () => (
         <div className="flex min-h-screen flex-col items-center justify-center bg-cover">
             <div className="container mx-auto">
-                <h1 className="text-3xl font-bold text-center my-8">Bares Disponibles</h1>
+                <h1 className="text-3xl font-bold text-center mt-6">Bares Disponibles</h1>
                 <div className="flex flex-wrap justify-center">
                     {establishments.map(bar => (
                         <BarCard
