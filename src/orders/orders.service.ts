@@ -10,6 +10,7 @@ import { OrderProduct } from './entities/order-product.entity';
 import { CreateOrderProductDto } from './dto/create-order-product.dto';
 import { Product } from 'src/products/entities/product.entity';
 import { Session } from 'src/sessions/entities/session.entity';
+import { OrdersGateway } from './orders.gateway';
 
 @Injectable()
 export class OrdersService {
@@ -26,6 +27,7 @@ export class OrdersService {
     private readonly productRepository: Repository<Product>,
     @InjectRepository(Session) // Repositorio para la sesión
     private readonly sessionRepository: Repository<Session>,
+    private readonly ordersGateway: OrdersGateway,
   ) {}
 
   // Función para crear una orden
@@ -67,8 +69,23 @@ export class OrdersService {
       date,
       session
     });
-    
-    return this.orderRepository.save(order);
+
+    const newOrder = await this.orderRepository.save(order); // Guardar el pedido en la base de datos
+  
+  // Hacer una nueva consulta para obtener el pedido con todas las relaciones
+  const completeOrder = await this.orderRepository.findOne({
+    where: { id: newOrder.id },
+    relations: ['orderProducts', 'user', 'table', 'table.establishment', 'session'],
+  });
+
+  if (!completeOrder) {
+    throw new NotFoundException(`No se pudo cargar el pedido con ID ${newOrder.id}`);
+  }
+
+  // Emitir el evento a través del gateway para que todos los clientes conectados lo reciban
+  this.ordersGateway.emitOrderUpdate(completeOrder);
+
+  return completeOrder;
   }
 
   async createOrderProducts(createOrderProductDto: CreateOrderProductDto) {

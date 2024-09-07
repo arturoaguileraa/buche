@@ -9,6 +9,7 @@ import { AuthModule } from './auth/model/auth.module';
 import { ConfigModule } from '@nestjs/config';
 import { ProductCategoriesModule } from './products/product-categories.module';
 import { SessionModule } from './sessions/sessions.module';
+import { OrdersGateway } from './orders/orders.gateway';
 
 @Module({
   imports: [
@@ -35,6 +36,6 @@ import { SessionModule } from './sessions/sessions.module';
     SessionModule
   ],
   controllers: [],
-  providers: [],
+  providers: [OrdersGateway],
 })
 export class AppModule {}

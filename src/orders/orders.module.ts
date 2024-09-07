@@ -8,12 +8,13 @@ import { Product } from 'src/products/entities/product.entity';
 import { TablesModule } from 'src/tables/tables.module';
 import { UsersModule } from 'src/users/users.module';
 import { Session } from 'src/sessions/entities/session.entity';
+import { OrdersGateway } from './orders.gateway';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Order,OrderProduct, Product, Session]),
   TablesModule, UsersModule
 ],
   controllers: [OrdersController],
-  providers: [OrdersService],
+  providers: [OrdersService, OrdersGateway],
 })
 export class OrdersModule {}
