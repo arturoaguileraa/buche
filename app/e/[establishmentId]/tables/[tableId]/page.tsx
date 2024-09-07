@@ -7,6 +7,7 @@ import { useProfileData } from '@/app/utils/jwtUtils';
 import Menu from '@/components/ui/menu';
 import { Button } from '@/components/ui/button';
 import Loader from '@/components/ui/loader';
+import { io } from 'socket.io-client';
 
 interface User {
     id : number;
@@ -14,6 +15,7 @@ interface User {
 
 const TablePage = () => {
   const router = useRouter();
+  const socket = io('http://localhost:3001');
   const profileData = useProfileData();
   const { establishmentId, tableId } = useParams();
   const [tableStatus, setTableStatus] = useState(null);
@@ -135,7 +137,11 @@ const TablePage = () => {
       // Si la solicitud es exitosa, devuelve el id del pedido
       if (response.status === 201) {
         const orderId = response.data.id; // Obtener el id del pedido creado
-        console.log('Pedido creado con éxito. ID del pedido:', orderId);
+        console.log('Pedido creado con éxito. Pedido:', response.data);
+
+        // Emitir el evento 'newOrder' al servidor WebSocket
+      socket.emit('newOrder', newOrder); // Aquí emitimos el evento al servidor WebSocket
+
         return orderId; // Retorna el ID del pedido
       } else {
         console.error('Error al crear el pedido. Código de estado:', response.status);

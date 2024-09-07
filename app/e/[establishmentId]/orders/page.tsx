@@ -2,11 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import io from 'socket.io-client'; // Importa el cliente de WebSocket
 import api from '@/app/api/api';
 import OwnerOrderCard from '@/components/ui/OwnerOrderCard';
 import { Button } from '@/components/ui/button';
-import { table } from 'console';
 import Loader from '@/components/ui/loader';
+
+// Asegúrate de que la URL coincida con tu servidor de WebSocket
+const socket = io('http://localhost:3001'); 
 
 export interface Table {
   number: number;
@@ -47,21 +50,34 @@ const OrderPage = () => {
   const [orders, setOrders] = useState<Order[]>([]); // Estado para almacenar los pedidos tipados con la interfaz Order
   const [loading, setLoading] = useState(true); // Estado para manejar la carga de datos
 
-    const fetchOrders = async () => {
-      try {
-        const response = await api.get(`/orders/establishment/${establishmentId}`);
-        setOrders(response.data);
-      } catch (error) {
-        console.error('Error fetching orders:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Función para fetchear pedidos
+  const fetchOrders = async () => {
+    try {
+      const response = await api.get(`/orders/establishment/${establishmentId}`);
+      setOrders(response.data);
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-
-
+    // Fetchear los pedidos iniciales
     fetchOrders();
+
+    // Conectamos al WebSocket cuando el componente se monta
+    socket.on('connect', () => {
+      console.log('Conectado al WebSocket');
+    });
+
+    // Escuchamos el evento 'orderUpdate' desde el servidor WebSocket
+    socket.on('orderUpdate', (updatedOrder) => {
+      console.log('Nuevo pedido recibido:', updatedOrder);
+      // Actualizamos el estado de los pedidos al recibir un nuevo pedido
+      window.location.reload();
+    });
+
   }, [establishmentId]);
 
   // Función para actualizar el pedido en la lista
@@ -81,10 +97,10 @@ const OrderPage = () => {
 
   return (
     <div className="bg-blue-100 p-5 min-h-screen">
-    <div className='flex justify-between  mb-5'>
-        <h1 className="text-2xl font-bold text-center">Pedidos - {orders[0].table.establishment.name}</h1>
+      <div className='flex justify-between mb-5'>
+        <h1 className="text-2xl font-bold text-center">Pedidos - {orders[0]?.table.establishment.name}</h1>
         <Button onClick={fetchOrders}>Recargar nuevos pedidos</Button>
-    </div>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {orders.length > 0 ? (
           orders.map((order, index) => (
