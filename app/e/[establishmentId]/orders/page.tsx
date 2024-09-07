@@ -5,10 +5,12 @@ import { useParams } from 'next/navigation';
 import api from '@/app/api/api';
 import OwnerOrderCard from '@/components/ui/OwnerOrderCard';
 import { Button } from '@/components/ui/button';
+import { table } from 'console';
+import Loader from '@/components/ui/loader';
 
 export interface Table {
   number: number;
-  establishmentId: number;
+  establishment: any;
 }
 
 export interface User {
@@ -74,13 +76,13 @@ const OrderPage = () => {
   };
 
   if (loading) {
-    return <div className="text-center">Cargando pedidos...</div>;
+    return <Loader message='Cargando pedidos...'></Loader>;
   }
 
   return (
     <div className="bg-blue-100 p-5 min-h-screen">
     <div className='flex justify-between  mb-5'>
-        <h1 className="text-xl font-bold text-center">Pedidos</h1>
+        <h1 className="text-2xl font-bold text-center">Pedidos - {orders[0].table.establishment.name}</h1>
         <Button onClick={fetchOrders}>Recargar nuevos pedidos</Button>
     </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

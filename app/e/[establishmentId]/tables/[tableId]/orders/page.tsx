@@ -3,6 +3,7 @@
 import { useParams } from 'next/navigation';
 import React, { useState, useEffect } from 'react';
 import api from "../../../../../api/api"
+import Loader from '@/components/ui/loader';
 interface Order {
   id: number;
   status: string;
@@ -38,7 +39,7 @@ const OrdersPage: React.FC = () => {
   }, [establishmentId, tableId]);
 
   if (loading) {
-    return <p>Cargando...</p>;
+    return <Loader message='Cargando...'></Loader>;
   }
 
   if (error) {

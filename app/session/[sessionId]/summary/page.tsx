@@ -4,6 +4,7 @@ import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import api from '@/app/api/api';
 import OrderCard from '@/components/ui/OrderCard';
+import Loader from '@/components/ui/loader';
 
 interface Product {
   id: number;
@@ -65,16 +66,14 @@ const SessionSummaryPage = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <p className="text-lg font-medium text-gray-700">Loading...</p>
-      </div>
+      <Loader></Loader>
     );
   }
 
   if (!session) {
     return (
       <div className="flex justify-center items-center h-screen">
-        <p className="text-lg font-medium text-gray-700">Session not found.</p>
+        <p className="text-lg font-medium text-gray-700">Sesión no encontrada.</p>
       </div>
     );
   }

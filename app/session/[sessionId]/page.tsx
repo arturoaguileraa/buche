@@ -1,6 +1,7 @@
 'use client';
 
 import api from '@/app/api/api';
+import Loader from '@/components/ui/loader';
 import { useParams, useRouter } from 'next/navigation'; // Importar useRouter
 import React, { useState, useEffect } from 'react';
 
@@ -68,7 +69,7 @@ const OrdersPage: React.FC = () => {
   }
 
   if (loading) {
-    return <p>Cargando...</p>;
+    return <Loader></Loader>;
   }
 
   if (error) {

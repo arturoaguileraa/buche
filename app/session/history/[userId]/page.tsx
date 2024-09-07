@@ -6,6 +6,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import api from '@/app/api/api';
 import SessionCard from '@/components/ui/SessionCard';
+import Loader from '@/components/ui/loader';
 
 interface Session {
   id: number;
@@ -41,7 +42,7 @@ const SessionHistoryPage: React.FC = () => {
   }, [userId]);
 
   if (loading) {
-    return <p>Cargando...</p>;
+    return <Loader></Loader>;
   }
 
   if (error) {

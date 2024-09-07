@@ -5,6 +5,7 @@ import api from '../api/api';
 import { useProfileData } from '../utils/jwtUtils';
 import BarCard from '@/components/ui/barcard';
 import { Button } from '@/components/ui/button';
+import Loader from '@/components/ui/loader';
 
 type Bar = {
     id: string;
@@ -13,6 +14,7 @@ type Bar = {
     imageUrl: string;
     operatingHours: string;
     owner: {id: string};
+    type: any;
 };
 
 const Home = () => {
@@ -49,7 +51,6 @@ const Home = () => {
     };
 
     const fetchMoreEstablishments = async () => {
-      console.log(!hasMore, loading);
         
       if (!hasMore || loading) return;
 
@@ -87,7 +88,7 @@ const Home = () => {
         <div className="flex min-h-screen flex-col items-center justify-center bg-cover">
             <div className="container mx-auto">
                 <h1 className="text-3xl font-bold text-center mt-6">Bares Disponibles</h1>
-                <div className="flex flex-wrap justify-center">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 justify-center mt-6">
                     {establishments.map(bar => (
                         <BarCard
                             key={bar.id}
@@ -97,60 +98,64 @@ const Home = () => {
                             imageUrl={'https://via.placeholder.com/400x300'}
                             operatingHours={bar.operatingHours}
                             isOwner={false}
+                            type={bar.type}
                         />
                     ))}
-                    {loading && <p>Cargando más establecimientos...</p>}
+                    {loading && <Loader></Loader>}
                     {!hasMore && <p>No hay más establecimientos disponibles.</p>}
                 </div>
             </div>
         </div>
     );
-
+    
     const renderOwnerView = () => {
-      // Filtrar los bares que pertenecen al propietario actual
-      const ownerestablishments = establishments.filter(bar => bar.owner.id === profileData?.id);
-  
-      return (
-          <div className="flex flex-col items-center min-h-screen">
-              <div className="flex flex-col items-center justify-between w-full p-4 bg-gray-100 border-b">
-                  <h1 className="text-xl font-bold text-gray-700">Bienvenido, {profileData?.name}</h1>
-                  <div className="flex justify-center w-full">
-                      <Button onClick={handleAddEstablishment}>+ Añadir Establecimiento</Button>
-                  </div>
-              </div>
-              <div className="flex flex-col justify-center mt-8"> 
-              <h1 className="flex text-xl justify-center font-bold text-gray-700">Tus establecimientos</h1>
-                  {ownerestablishments.length > 0 ? (
-                      ownerestablishments.map(bar => (
-                          <BarCard
-                              key={bar.id}
-                              id={bar.id}
-                              name={bar.name}
-                              description={bar.description}
-                              imageUrl={'https://via.placeholder.com/400x300'}
-                              operatingHours={bar.operatingHours}
-                              isOwner={true}
-                          />
-                      ))
-                  ) : (
-                      <p>No tienes establecimientos disponibles.</p>
-                  )}
-              </div>
-          </div>
-      );
-  };
+        // Filtrar los bares que pertenecen al propietario actual
+        const ownerestablishments = establishments.filter(bar => bar.owner.id === profileData?.id);
+    
+        return (
+            <div className="flex flex-col items-center min-h-screen">
+                <div className="flex flex-col items-center justify-between w-full p-4 bg-gray-100 border-b">
+                    <h1 className="text-xl font-bold text-gray-700">Bienvenido, {profileData?.name}</h1>
+                    <div className="flex justify-center w-full">
+                        <Button onClick={handleAddEstablishment}>+ Añadir Establecimiento</Button>
+                    </div>
+                </div>
+                <div className="flex flex-col justify-center mt-8"> 
+                    <h1 className="flex text-xl justify-center font-bold text-gray-700">Tus establecimientos</h1>
+                    {ownerestablishments.length > 0 ? (
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 justify-center mt-6">
+                            {ownerestablishments.map(bar => (
+                                <BarCard
+                                    key={bar.id}
+                                    id={bar.id}
+                                    name={bar.name}
+                                    description={bar.description}
+                                    imageUrl={'https://via.placeholder.com/400x300'}
+                                    operatingHours={bar.operatingHours}
+                                    isOwner={true}
+                                    type={bar.type}
+                                />
+                            ))}
+                        </div>
+                    ) : (
+                        <p>No tienes establecimientos disponibles.</p>
+                    )}
+                </div>
+            </div>
+        );
+    };
+    
   
 
     const renderWaiterView = () => {
-        window.location.href = `/e/${profileData?.establishment?.id}`;
         return (
         <div className="flex min-h-screen flex-col items-center justify-center bg-cover">
             <div className="container mx-auto">
                 <h1 className="text-3xl font-bold text-center mt-8">Tu Panel de Camarero</h1>
                 <h2 className="text-xl font-bold text-center my-3">Establecimiento: {profileData?.establishment?.name}</h2>
-                <div className="flex flex-wrap justify-center space-y-4">
-                    <Button className="w-full" onClick={() => window.location.href = `/e/${profileData?.establishment?.id}`}>Ver Establecimiento</Button>
-                    <Button className="w-full" onClick={() => window.location.href = `/e/${profileData?.establishment?.id}/tables`}>Ver Mesas</Button>
+                <div className="flex w-full flex-col justify-center space-y-4">
+                    <Button className="flex w-1/2" onClick={() => window.location.href = `/e/${profileData?.establishment?.id}`}>Ver Establecimiento</Button>
+                    <Button className="flex w-1/2" onClick={() => window.location.href = `/e/${profileData?.establishment?.id}/tables`}>Ver Mesas</Button>
                 </div>
             </div>
         </div>

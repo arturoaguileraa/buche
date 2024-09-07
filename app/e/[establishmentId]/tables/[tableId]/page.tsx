@@ -6,6 +6,7 @@ import api from '@/app/api/api';
 import { useProfileData } from '@/app/utils/jwtUtils';
 import Menu from '@/components/ui/menu';
 import { Button } from '@/components/ui/button';
+import Loader from '@/components/ui/loader';
 
 interface User {
     id : number;
@@ -39,7 +40,7 @@ const TablePage = () => {
   
 
   if (isLoading) {
-      return <p>Loading...</p>;
+      return <Loader message='Cargando...'></Loader>;
   }
 
   const handleStartSession = async () => {
@@ -170,17 +171,18 @@ const TablePage = () => {
       } else if (sessionStarted || `${user?.id}` !== profileData?.id) {
           
           return (
-            <div className="container mx-auto py-8">
-                <p>Bienvenido de nuevo a tu sesión.</p>
+            <div className="container mx-auto py-8 mb-12">
+                <p className='text-3xl'> Mesa {tableId}</p>
+                <p className='my-2'>Bienvenido de nuevo a tu sesión.</p>
                 <div className="flex justify-between items-center mb-4">
                 <Button onClick={handleOpenPopup} className="bg-red-500 text-white">
                     Finalizar Sesión
                 </Button>
                 {sessionPopUp && (
                         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-20">
-                            <div className="bg-white p-6 rounded shadow-lg">
+                            <div className="bg-white p-6 rounded shadow-lg m-4">
                                 <p>¿Estás seguro que quieres finalizar esta sesión?</p>
-                                <div className="mt-4 flex justify-end">
+                                <div className="mt-4 flex justify-around">
                                     <Button variant="secondary" onClick={handleClosePopup}>
                                         Cancelar
                                     </Button>
