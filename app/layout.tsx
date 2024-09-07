@@ -3,8 +3,9 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Providers from "./Providers";
 import Header from "@/components/ui/Header";
+import { Comfortaa } from 'next/font/google'; // Importa la fuente
 
-const inter = Inter({ subsets: ["latin"] });
+const comfortaa = Comfortaa({ weight: ['400', '700'], subsets: ['latin'] }); // Configura los pesos y subsets que necesitas
 
 export const metadata: Metadata = {
   title: "buche",
@@ -18,7 +19,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={comfortaa.className}>
         <Providers>
           <Header></Header>
           {children}
