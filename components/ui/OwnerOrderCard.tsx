@@ -27,7 +27,7 @@ export interface Session {
 
 export interface Order {
   id: number;
-  status: 'pending' | 'completed' | 'cancelled';
+  status: any;
   total: number;
   date: string;
   table: Table;
@@ -90,7 +90,11 @@ const OwnerOrderCard: React.FC<OwnerOrderCardProps> = ({ order, onUpdateOrder, o
       </div>
 
       <div className="mt-3">
-        {status === 'pending' ? (
+        {order.status != 'pending' ? (
+          <p className={`text-center mt-3 ${status === 'completed' ? 'text-green-500' : 'text-red-500'}`}>
+            {order.status == 'completed' ? 'Pedido entregado' : 'Pedido cancelado'}
+          </p> 
+        ) : (
           <div className="flex justify-between w-full">
             <button
               className="bg-green-500 text-white px-4 py-2 rounded w-full mr-2"
@@ -105,10 +109,6 @@ const OwnerOrderCard: React.FC<OwnerOrderCardProps> = ({ order, onUpdateOrder, o
               Cancelar pedido
             </button>
           </div>
-        ) : (
-          <p className={`text-center mt-3 ${status === 'completed' ? 'text-green-500' : 'text-red-500'}`}>
-            {status === 'completed' ? 'Pedido entregado' : 'Pedido cancelado'}
-          </p>
         )}
       </div>
     </div>
