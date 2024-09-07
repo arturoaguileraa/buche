@@ -168,7 +168,7 @@ async getOrdersByTable(establishmentId: number, tableId: number): Promise<Order[
     return this.orderRepository.find({
       where: { table: { establishmentId }, 
      },
-      relations: ['table', 'orderProducts', 'orderProducts.product'], // Incluye la relación con la tabla para obtener la información del establecimiento
+      relations: ['table', 'table.establishment', 'orderProducts', 'orderProducts.product'], // Incluye la relación con la tabla para obtener la información del establecimiento
     });
   }
 
