@@ -127,11 +127,10 @@ const handleSubmitOrderProducts = async () => {
     await Promise.all(promises);
 
     // Aquí puedes manejar qué pasa después de que todos los order-products se hayan creado
-    alert('Productos asociados al pedido con éxito');
+    console.log('Productos asociados al pedido con éxito');
     window.location.reload()
   } catch (error) {
     console.error('Error al asociar los productos al pedido:', error);
-    alert('Hubo un problema al asociar los productos al pedido');
   }
 };
 
