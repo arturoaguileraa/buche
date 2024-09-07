@@ -7,6 +7,7 @@ import api from '@/app/api/api';
 import OwnerOrderCard from '@/components/ui/OwnerOrderCard';
 import { Button } from '@/components/ui/button';
 import Loader from '@/components/ui/loader';
+import { Howl } from 'howler'; 
 
 // Asegúrate de que la URL coincida con tu servidor de WebSocket
 const socket = io('http://localhost:3001'); 
@@ -36,7 +37,7 @@ export interface Session {
 
 export interface Order {
   id: number;
-  status: 'pending' | 'completed' | 'cancelled';
+  status: any;
   total: number;
   date: string;
   table: Table;
@@ -50,10 +51,17 @@ const OrderPage = () => {
   const [orders, setOrders] = useState<Order[]>([]); // Estado para almacenar los pedidos tipados con la interfaz Order
   const [loading, setLoading] = useState(true); // Estado para manejar la carga de datos
 
+    // Configurar el sonido de notificación
+  const notificationSound = new Howl({
+    src: ['/notification.mp3'], // Asegúrate de que la ruta esté bien configurada
+    volume: 1.0, // Ajusta el volumen si es necesario
+  });
+
   // Función para fetchear pedidos
   const fetchOrders = async () => {
     try {
       const response = await api.get(`/orders/establishment/${establishmentId}`);
+      
       setOrders(response.data);
     } catch (error) {
       console.error('Error fetching orders:', error);
@@ -73,9 +81,11 @@ const OrderPage = () => {
 
     // Escuchamos el evento 'orderUpdate' desde el servidor WebSocket
     socket.on('orderUpdate', (updatedOrder) => {
+      notificationSound.play();
+
       console.log('Nuevo pedido recibido:', updatedOrder);
+      fetchOrders();
       // Actualizamos el estado de los pedidos al recibir un nuevo pedido
-      window.location.reload();
     });
 
   }, [establishmentId]);
