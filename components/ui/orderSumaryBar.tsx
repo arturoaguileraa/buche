@@ -6,8 +6,8 @@ interface OrderSummaryBarProps {
 const OrderSummaryBar: React.FC<OrderSummaryBarProps> = ({ totalAmount, clickFunction }) => {
   return (
     <div
-      className="fixed bottom-0 left-0 right-0 bg-slate-900 p-4 shadow-md"
-      style={{ zIndex: 1000 }}
+      className="fixed left-0 right-0 bg-slate-900 p-4 shadow-md"
+      style={{ zIndex: 1000, bottom: -1 }}
     >
       <div className="flex justify-between items-center">
         <div className="text-xl text-white font-semibold">Total: ${totalAmount.toFixed(2)}</div>

@@ -156,21 +156,24 @@ const handleConfirmOrder = () => {
   return (
     <div className="relative"> {/* relative positioning to contain the fixed bar */}
     <h1 className="flex justify-center text-xl font-bold text-gray-700 mt-2">{inSession ? "¿Qué te apetece hoy?" : "Menú"}</h1>
-      <div className="flex space-x-4 mb-8 mt-2 border-b border-t pt-4 pb-4">
-        {productCategories.length > 0 ? (
-          productCategories.map(category => (
-            <button
-              key={category.id}
-              className={`px-4 py-2 rounded ${selectedCategory === category.id ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}
-              onClick={() => handleCategoryClick(category.id)}
-            >
-              {category.name}
-            </button>
-          ))
-        ) : (
-          <div>Este establecimiento no tiene productos todavía...</div>
-        )}
-      </div>
+    <div className="overflow-x-auto whitespace-nowrap mb-8 mt-2 border-b border-t pt-4 pb-4">
+    <div className="inline-flex space-x-4">
+      {productCategories.length > 0 ? (
+        productCategories.map(category => (
+          <button
+            key={category.id}
+            className={`px-4 py-2 rounded ${selectedCategory === category.id ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}
+            onClick={() => handleCategoryClick(category.id)}
+          >
+            {category.name}
+          </button>
+        ))
+      ) : (
+        <div>Este establecimiento no tiene productos todavía...</div>
+      )}
+    </div>
+  </div>
+
 
       <div>
         {filteredProducts.map(product => (
@@ -209,7 +212,7 @@ const handleConfirmOrder = () => {
       {/* Modal para el resumen del pedido */}
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-          <div className="bg-white p-4 rounded-lg shadow-lg max-w-lg w-full">
+          <div className="bg-white p-4 rounded-lg shadow-lg max-w-lg w-full m-3">
             <h2 className="text-2xl font-bold mb-4">Resumen del pedido</h2>
             <ul className="mb-4">
               {cart.map((item) => {

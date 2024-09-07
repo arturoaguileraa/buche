@@ -43,7 +43,7 @@ const OrderCard: React.FC<{ order: Order }> = ({ order }) => {
         onClick={handleToggleProducts}
         className="bg-blue-600 text-white py-2 px-4 mt-4 rounded-lg shadow-md hover:bg-blue-700 transition duration-300"
       >
-        {showProducts ? 'Hide Products' : 'Show Products'}
+        {showProducts ? 'Ocultar productos' : 'Mostrar productos'}
       </button>
       
       {showProducts && (

@@ -2,6 +2,7 @@
 
 import { signIn, signOut, useSession } from 'next-auth/react';
 import { Button } from './button';
+import { FcGoogle } from 'react-icons/fc'; // Importamos el icono de Google
 import { useState } from 'react';
 
 export default function SessionButton() {
@@ -42,7 +43,13 @@ export default function SessionButton() {
                     )}
                 </>
             ) : (
-                <Button onClick={() => signIn("google")}>Sign in with Google</Button>
+                <div
+      className="bg-white border border-blue-950 px-4 py-2 rounded flex items-center space-x-2 cursor-pointer"
+      onClick={() => signIn('google')}
+    >
+      <FcGoogle size={24} /> {/* Icono de Google */}
+      <span>Sign in with Google</span>
+    </div>
             )}
         </>
     );

@@ -1,9 +1,10 @@
 import api from '@/app/api/api';
 import React, { useState } from 'react';
+import { TrashIcon } from '@radix-ui/react-icons';
 
 export interface Table {
   number: number;
-  establishmentId: number;
+  establishment: any;
 }
 
 export interface User {
@@ -68,10 +69,10 @@ const OwnerOrderCard: React.FC<OwnerOrderCardProps> = ({ order, onUpdateOrder, o
       <div className="flex justify-between items-center mb-2">
         <h2 className="text-lg font-semibold">Mesa {order.table.number}</h2>
         <button
-          className="bg-red-500 text-white px-3 py-1 rounded"
+          className="bg-red-500 text-white px-3 py-2 rounded"
           onClick={deleteOrder}
         >
-          Eliminar
+          <TrashIcon></TrashIcon>
         </button>
       </div>
 
@@ -95,18 +96,18 @@ const OwnerOrderCard: React.FC<OwnerOrderCardProps> = ({ order, onUpdateOrder, o
               className="bg-green-500 text-white px-4 py-2 rounded w-full mr-2"
               onClick={() => updateOrderStatus('completed')}
             >
-              Entregar
+              Marcar como entregado
             </button>
             <button
               className="bg-red-500 text-white px-4 py-2 rounded w-full ml-2"
               onClick={() => updateOrderStatus('cancelled')}
             >
-              Cancelar
+              Cancelar pedido
             </button>
           </div>
         ) : (
           <p className={`text-center mt-3 ${status === 'completed' ? 'text-green-500' : 'text-red-500'}`}>
-            {status === 'completed' ? 'Entregado' : 'Cancelado'}
+            {status === 'completed' ? 'Pedido entregado' : 'Pedido cancelado'}
           </p>
         )}
       </div>

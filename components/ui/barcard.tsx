@@ -1,20 +1,24 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Pencil1Icon } from '@radix-ui/react-icons';
+import { Pencil1Icon, TrashIcon } from '@radix-ui/react-icons';
 import api from '@/app/api/api'; // Asegúrate de importar tu cliente API
 
 interface BarCardProps {
   id: string;
   name: string;
   description: string;
-  imageUrl: string;
+  imageUrl?: string; // Hacemos que imageUrl sea opcional, porque lo definimos basado en el tipo
   operatingHours: string;
   isOwner: boolean; // Añadimos esta prop para saber si el usuario es el dueño
+  type: 'bar' | 'restaurant' | 'cafe' | 'bistro'; // Definimos explícitamente los tipos de establecimiento
 }
 
-const BarCard: React.FC<BarCardProps> = ({ id, name, description, imageUrl, operatingHours, isOwner }) => {
+const BarCard: React.FC<BarCardProps> = ({ id, name, description, operatingHours, isOwner, type }) => {
   const [showConfirm, setShowConfirm] = useState(false); // Estado para controlar la visibilidad del pop-up
+
+  // Definir el path de la imagen basado en el tipo (sin 'public' en la ruta)
+  const imagePath = `/${type}.jpg`;
 
   const handleCardClick = () => {
     window.location.href = `/e/${id}`;
@@ -45,8 +49,9 @@ const BarCard: React.FC<BarCardProps> = ({ id, name, description, imageUrl, oper
   };
 
   return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg m-4 cursor-pointer" onClick={handleCardClick}>
-      <img className="w-full" src={imageUrl} alt={`Imagen de ${name}`} />
+    <div className="max-w-sm rounded border overflow-hidden shadow-lg m-4 cursor-pointer" onClick={handleCardClick}>
+      {/* Renderizamos la imagen basada en el tipo */}
+      <img className="w-full" src={imagePath} alt={`Imagen de ${type}`} />
       <div className="px-6 py-4">
         <div className="flex justify-between items-center">
           <div className="font-bold text-xl mb-2">{name}</div>
@@ -66,6 +71,7 @@ const BarCard: React.FC<BarCardProps> = ({ id, name, description, imageUrl, oper
               className="text-red-500 hover:text-red-700 flex items-center"
               onClick={handleDeleteClick}
             >
+              <TrashIcon className="mr-2" />
               Eliminar
             </button>
           </div>

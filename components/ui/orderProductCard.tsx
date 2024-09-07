@@ -20,7 +20,7 @@ interface OrderProductCardProps {
     onRemove
   }) => {
     return (
-      <div className="border rounded-lg p-4 shadow-md">
+      <div className="border rounded-lg my-4 p-4 shadow-md">
         <h3 className="text-xl font-semibold mb-2">{name}</h3>
         <p className="text-gray-600 mb-2">{description}</p>
         <p className="text-gray-900 font-bold mb-2">${Number(price).toFixed(2)}</p>
