@@ -18,13 +18,13 @@ import { OrdersGateway } from './orders/orders.gateway';
     }),
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: '44668545',
-      database: 'db_test',
+      host: process.env.DB_HOST,
+      port: parseInt(process.env.DB_PORT, 10) || 5432,
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
       autoLoadEntities: true,
-      synchronize: true, // Be careful with this in production!
+      synchronize: process.env.NODE_ENV !== 'production',  // Puedes deshabilitar sincronización en producción
     }),
     ProductCategoriesModule,
     EstablishmentsModule,

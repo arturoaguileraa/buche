@@ -10,7 +10,7 @@ import { Order } from './entities/order.entity';
   
 @WebSocketGateway({
     cors: {
-      origin: 'http://localhost:3000', // Permitir el frontend
+      origin: process.env.FRONTEND_URL, // Permitir el frontend
       methods: ['GET', 'POST'], // Los métodos permitidos
       credentials: true, // Si necesitas autenticación o cookies
     },

@@ -15,7 +15,7 @@ async function bootstrap() {
   }));
 
   app.use(cors({
-    origin: 'http://localhost:3000', // Cambia esto si tu frontend está en una URL diferente
+    origin: process.env.FRONTEND_URL, // Cambia esto si tu frontend está en una URL diferente
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   }));
