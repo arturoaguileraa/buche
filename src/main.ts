@@ -1,8 +1,6 @@
-// src/main.ts
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import * as cors from 'cors';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -14,11 +12,13 @@ async function bootstrap() {
     stopAtFirstError: false,
   }));
 
-  app.use(cors({
-    origin: process.env.FRONTEND_URL, // Cambia esto si tu frontend está en una URL diferente
+  // Configurar CORS con app.enableCors
+  app.enableCors({
+    origin: process.env.FRONTEND_URL, // Asegúrate de que FRONTEND_URL esté definida correctamente en .env
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-  }));
+    credentials: true, // Agrega esto si estás usando cookies o autenticación
+  });
 
   await app.listen(3001);
 }
