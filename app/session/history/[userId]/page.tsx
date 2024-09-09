@@ -46,7 +46,7 @@ const SessionHistoryPage: React.FC = () => {
   }
 
   if (error) {
-    return <p>{error}</p>;
+    return <p className='flex justify-center items-center'>{error}</p>;
   }
 
   return (

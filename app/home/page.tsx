@@ -85,10 +85,13 @@ const Home = () => {
     };
 
     const renderClientView = () => (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-cover">
-            <div className="container mx-auto">
+        <div className="flex flex-col items-center min-h-screen">
+            <div className="flex flex-col items-center justify-between w-full p-4 bg-gray-100 border-b">
             <h1 className="flex text-xl font-bold justify-center text-gray-700 m-3">Bienvenido, {profileData?.name}</h1>
                 <h1 className="text-3xl font-bold text-center">Bares Disponibles</h1>
+            </div>
+            <div className="container mx-auto">
+            {establishments.length > 0 ? (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 justify-center mt-2">
                     {establishments.map(bar => (
                         <BarCard
@@ -105,6 +108,10 @@ const Home = () => {
                     {loading && <Loader></Loader>}
                     {!hasMore && <p>No hay más establecimientos disponibles.</p>}
                 </div>
+                    ) : (<div className='flex flex-col h-screen justify-center'>
+                        <div className='flex justify-center items-center'>No hay establecimientos disponibles.</div>
+                        <div className='flex justify-center items-center'>Prueba a crear uno tú mismo creándote una cuenta Owner.</div></div>
+            )}
             </div>
         </div>
     );
@@ -150,7 +157,7 @@ const Home = () => {
 
     const renderWaiterView = () => {
         return (
-        <div className="flex min-h-screen flex-col items-center justify-center bg-cover">
+        <div className="flex min-h-screen flex-col items-center bg-cover">
             <div className="container mx-auto">
                 <h1 className="text-3xl font-bold text-center mt-8">Tu Panel de Camarero</h1>
                 <h2 className="text-xl font-bold text-center my-3">Establecimiento: {profileData?.establishment?.name}</h2>
@@ -165,11 +172,12 @@ const Home = () => {
 
     const renderAdminView = () => {
         return (
-            <div className="flex min-h-screen flex-col items-center justify-center bg-cover">
-                <div className="container mx-auto">
+            <div className="flex min-h-screen flex-col items-center  bg-cover">
+                <div className="flex flex-col items-center justify-between w-full p-4 bg-gray-100 border-b">
                     <h1 className="text-3xl font-bold text-center mt-8">Panel de Administrador</h1>
                     <h2 className="text-xl font-bold text-center my-3">Gestiona los Establecimientos y Usuarios</h2>
-                    
+                </div>
+                <div className="container mx-auto">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 justify-center mt-6">
                         {establishments.map(bar => (
                             <BarCard
