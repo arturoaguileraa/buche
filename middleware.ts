@@ -5,7 +5,7 @@ import jwt from 'jsonwebtoken';
 import { ProfileData } from './app/utils/jwtUtils';
 // import { refreshToken } from './app/api/api';
 
-const secret = process.env.AUTH_SECRET;
+const secret = process.env.NEXTAUTH_SECRET;
 
 export async function middleware(request: NextRequestWithAuth) {
   const token = await getToken({ req: request, secret });
