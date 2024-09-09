@@ -1,3 +1,7 @@
+export const config = {
+  runtime: 'nodejs',
+};
+
 // utils/api.ts
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
@@ -24,7 +28,6 @@ export const refreshToken = async (token: { accessToken: string; }) => {
         Authorization: `Bearer ${token.accessToken}`,
       },
     });
-    console.log("He refescado token.");
     
     if (refreshTokenResponse.status === 200 || refreshTokenResponse.status === 201) {
       const { access_token: newToken } = await refreshTokenResponse.json();
