@@ -40,15 +40,36 @@ export class AuthController {
           if (!user) {
               throw new NotFoundException('User not found');
           }
-
+  
+          // Actualiza el rol del usuario
           user.role = body.role;
           await this.userService.update(user.id, user);
-
-          return { success: true };
+  
+          // Regenerar un nuevo token con el rol actualizado
+          const updatedPayload = { 
+              email: user.email, 
+              sub: user.id, 
+              role: user.role 
+          };
+          const newToken = await this.jwtService.signAsync(updatedPayload);
+  
+          // Devolver el usuario actualizado y el nuevo token
+          return { 
+              success: true, 
+              user: {
+                  id: user.id,
+                  email: user.email,
+                  role: user.role,
+                  name: user.name,
+                  // Devuelve cualquier otro dato del usuario que consideres necesario
+              },
+              token: newToken // Devolvemos el nuevo token
+          };
       } catch (error) {
           throw new UnauthorizedException('Invalid token');
       }
   }
+  
 
   @Post('refresh-token')
   async refreshToken(@Headers('Authorization') authorization: string) {
