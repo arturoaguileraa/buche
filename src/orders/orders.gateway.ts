@@ -27,5 +27,12 @@ import { Order } from './entities/order.entity';
     handleNewOrder(@MessageBody() order: Order) {
       this.server.emit('orderUpdate', order);
     }
+
+    // Escuchar el evento "callWaiter" para llamar al camarero
+    @SubscribeMessage('callWaiter')
+    handleCallWaiter(@MessageBody() data: any) {
+      const { tableId } = data;
+      this.server.emit('waiterCalled', { message: `La mesa ${tableId} ha solicitado un camarero.` });
+    }
   }
   
