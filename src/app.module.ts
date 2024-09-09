@@ -24,7 +24,7 @@ import { OrdersGateway } from './orders/orders.gateway';
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
       autoLoadEntities: true,
-      synchronize: process.env.NODE_ENV !== 'production',  // Puedes deshabilitar sincronización en producción
+      synchronize: true, 
     }),
     ProductCategoriesModule,
     EstablishmentsModule,
