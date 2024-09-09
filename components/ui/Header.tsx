@@ -5,7 +5,7 @@ import { signOut } from "next-auth/react";
 import { Button } from "./button";
 import BackButton from "./backbutton";
 import { useProfileData } from "@/app/utils/jwtUtils";
-import { HomeIcon } from '@radix-ui/react-icons';
+import { EyeOpenIcon, HomeIcon } from '@radix-ui/react-icons';
 import Link from "next/link";
 
 const Header = () => {
@@ -40,7 +40,7 @@ const Header = () => {
       case "ADMIN":
         return { text: " Admin", color: "text-gradient" }; // Admin en multicolor con mayor grosor
       default:
-        return { text: "", color: "" };
+        return { text: 'pending', color: "" };
     }
   };
   
@@ -95,12 +95,24 @@ const Header = () => {
       case "ADMIN":
         return (
           <div className="bg-white rounded-lg shadow-lg absolute right-0 mt-6 w-48">
+            <Link href={`/session/history/${profileData?.id}`}>
+              <p onClick={() => setIsDropdownOpen(false)} className="cursor-pointer hover:bg-gray-100 p-3 rounded">Historial de sesiones</p>
+            </Link>
+
+            <div className="bg-gray-300 w-48 h-px"></div>
+
+            <Link href={`/users/manage`}>
+              <p onClick={() => setIsDropdownOpen(false)} className="cursor-pointer hover:bg-gray-100 p-3 rounded">Gestionar usuarios</p>
+            </Link>
+
+            <div className="bg-gray-300 w-48 h-px"></div>
             <p
               className="cursor-pointer hover:bg-gray-100 p-3 rounded"
               onClick={() => handleOpenPopup()}
             >
               Log Out
             </p>
+
           </div>
         );
       default:
@@ -109,6 +121,10 @@ const Header = () => {
   };
 
   const roleText = getRoleText(profileData?.roles);
+
+  if(roleText.text === 'pending'){
+    return <></>
+  }
 
   return (
     <>
@@ -137,10 +153,16 @@ const Header = () => {
             <div className="flex items-center">
               {profileData?.roles == 'WAITER' ? (
                 <Link href={`/e/${profileData.establishment?.id}/tables`}>
-                <Button variant='secondary' onClick={() => {}}>Ver mesas</Button>
+                  <Button variant='secondary' onClick={() => {}}>
+                    {/* Icono y texto para pantallas grandes */}
+                    <span className="hidden lg:inline">Ver mesas</span>
+                    {/* Solo el icono para pantallas pequeñas */}
+                    <span className="flex lg:hidden" style={{margin : -6}}
+                    ><EyeOpenIcon className="m-0.5"></EyeOpenIcon><p className="">Mesas </p></span>
+                  </Button>
                 </Link>
-              ) : roleText.text === 'CLIENT' ? (
-                <BackButton />
+              ) : profileData.roles === 'CLIENT' ? (
+                <></>
               ) : (
                 <Link href="/add-establishment">
                   <Button variant='secondary'  onClick={() => {}}>
@@ -159,7 +181,7 @@ const Header = () => {
                 {profileData.image ? (
                   <img
                     src={profileData.image as string}
-                    alt="Profile"
+                    alt="?"
                     className="rounded-full h-full w-full object-cover"
                   />
                 ) : (
@@ -175,7 +197,7 @@ const Header = () => {
 
               {showPopup && (
                 <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
-                  <div className="bg-white p-6 rounded shadow-lg">
+                  <div className="bg-white p-6 rounded shadow-lg m-4">
                     <p>¿Estás seguro que quieres cerrar sesión?</p>
                     <div className="mt-4 flex justify-around">
                       <Button variant="secondary" onClick={handleClosePopup}>

@@ -59,7 +59,7 @@ const BarCard: React.FC<BarCardProps> = ({ id, name, description, operatingHours
         </div>
         <p className="text-gray-700 text-base">{description}</p>
         {isOwner && (
-          <div className="flex space-x-2 mt-2">
+          <div className="flex justify-between space-x-2 mt-2">
             <button
               className="text-blue-500 hover:text-blue-700 flex items-center"
               onClick={handleEditClick}
