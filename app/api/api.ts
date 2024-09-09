@@ -4,7 +4,7 @@ import { getSession } from 'next-auth/react';
 
 const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL, // URL de tu backend
-  timeout: 10000, // 10 segundos
+  timeout: 240000, // 4 min
 });
 
 api.interceptors.request.use(async (config) => {
