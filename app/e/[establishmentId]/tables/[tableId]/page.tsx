@@ -15,7 +15,7 @@ interface User {
 
 const TablePage = () => {
   const router = useRouter();
-  const socket = io('http://localhost:3001');
+  const socket = io(process.env.NEXT_PUBLIC_API_URL + '');
   const profileData = useProfileData();
   const { establishmentId, tableId } = useParams();
   const [tableStatus, setTableStatus] = useState(null);

@@ -10,7 +10,9 @@ import Loader from '@/components/ui/loader';
 import { Howl } from 'howler'; 
 
 // Asegúrate de que la URL coincida con tu servidor de WebSocket
-const socket = io('http://localhost:3001'); 
+
+const socket = io(process.env.NEXT_PUBLIC_API_URL + '');
+
 
 export interface Table {
   number: number;
@@ -52,8 +54,8 @@ const OrderPage = () => {
   const [loading, setLoading] = useState(true); // Estado para manejar la carga de datos
   const [showNotification, setShowNotification] = useState(false); // Estado para la notificación
   const [notificationMessage, setNotificationMessage] = useState('');
-
-    // Configurar el sonido de notificación
+  
+  // Configurar el sonido de notificación
   const notificationSound1 = new Howl({
     src: ['/notification.mp3'], // Asegúrate de que la ruta esté bien configurada
     volume: 1.0, // Ajusta el volumen si es necesario

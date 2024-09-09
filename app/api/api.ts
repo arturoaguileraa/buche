@@ -3,7 +3,7 @@ import axios from 'axios';
 import { getSession } from 'next-auth/react';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3001', // URL de tu backend
+  baseURL: process.env.NEXT_PUBLIC_API_URL, // URL de tu backend
 });
 
 api.interceptors.request.use(async (config) => {
@@ -18,7 +18,7 @@ api.interceptors.request.use(async (config) => {
 
 export const refreshToken = async (token: { accessToken: string; }) => {
   try {
-    const refreshTokenResponse = await fetch('http://localhost:3001/auth/refresh-token', {
+    const refreshTokenResponse = await fetch(process.env.NEXT_PUBLIC_API_URL +'/auth/refresh-token', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token.accessToken}`,

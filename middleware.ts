@@ -75,7 +75,7 @@ export async function middleware(request: NextRequestWithAuth) {
 
     if (userRole === 'OWNER') {
         // Verificar si el ownerId coincide con el del establecimiento
-        const response = await fetch(`http://localhost:3001/establishments/${establishmentId}`);
+        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/establishments/${establishmentId}`);
         const establishment = await response.json();
 
         if (establishment.owner.id !== user.id) {
@@ -91,7 +91,7 @@ export async function middleware(request: NextRequestWithAuth) {
 
     if (userRole === 'OWNER') {
         // Verificar si el ownerId coincide con el del establecimiento
-        const response = await fetch(`http://localhost:3001/establishments/${establishmentId}`);
+        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/establishments/${establishmentId}`);
         const establishment = await response.json();
 
         if (establishment.owner.id !== user.id) {
