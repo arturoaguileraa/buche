@@ -94,3 +94,16 @@
         transform: rotate(360deg);
     }
   } 
+
+  .text-gradient {
+    font-weight: bold;
+    font-size: 2em; /* Ajusta el tamaño a tus necesidades */
+    background: linear-gradient(90deg, red, orange, yellow, green, blue, indigo, violet);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: wheat;
+}
+
+
+
+
