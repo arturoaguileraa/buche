@@ -1,5 +1,3 @@
-//CON CONEXION ctrl + k + c
-
 import { NextRequestWithAuth, withAuth } from 'next-auth/middleware';
 import { getToken } from 'next-auth/jwt';
 import { NextResponse } from 'next/server';
@@ -116,6 +114,7 @@ export async function middleware(request: NextRequestWithAuth) {
 
 export const config = {
   matcher: ['/', '/((?!_next|api|favicon.ico).*)'],
+  runtime: 'nodejs', // Cambia a Node.js Runtime
 };
 
 

@@ -1,7 +1,3 @@
-export const config = {
-  runtime: 'nodejs',
-};
-
 // utils/api.ts
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
