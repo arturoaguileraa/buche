@@ -24,11 +24,14 @@ const TablePage = () => {
   const [user, setUser] = useState<User>();
   const [sessionId, setSessionId] = useState();
   const [sessionPopUp, setSessionPopUp] = useState(false);
-
+  const [establishmentOwnerId, setEstablishmentOwnerId] = useState();
   useEffect(() => {
       const fetchTableStatus = async () => {
           try {
               const response = await api.get(`/tables/${establishmentId}/${tableId}`);
+              const response2 = await api.get(`/establishments/${establishmentId}`)
+
+              setEstablishmentOwnerId(response2.data.owner.id)
               setTableStatus(response.data.status);
               setUser(response.data.user);
               setIsLoading(false);
@@ -40,7 +43,6 @@ const TablePage = () => {
       fetchTableStatus();
   }, [tableId]);
   
-
   if (isLoading) {
       return <Loader message='Cargando...'></Loader>;
   }
@@ -157,9 +159,13 @@ const TablePage = () => {
 
     router.push(`/session/${session.data.id}`)
   }
-  
-  
 
+  // Función para llamar a un camarero
+  const handleCallWaiter = () => {
+    socket.emit('callWaiter', { tableId });  // Emitir el evento de llamada a camarero
+  };
+  
+  
   if (tableStatus === 'available') {
       return (
           <div className='flex items-center justify-center min-h-screen flex-col h-full'>
@@ -170,15 +176,24 @@ const TablePage = () => {
       );
   }
 
+  const canAccessToSession = profileData?.roles === 'ADMIN' || 
+                           (profileData?.roles === 'OWNER' && Number(profileData?.id) == establishmentOwnerId) || 
+                           (profileData?.roles === 'WAITER' && profileData?.establishment?.id == establishmentId) || 
+                           (profileData?.roles === 'CLIENT' && Number(profileData?.id) == user?.id);
+
+
   if (tableStatus === 'occupied') {
 
-      if (user?.id !== profileData?.id) {
-          return <p>Lo siento, esta mesa ya está ocupada.</p>;
-      } else if (sessionStarted || `${user?.id}` !== profileData?.id) {
+      if (!canAccessToSession) {
+          return <div className='flex flex-col min-h-screen justify-center items-center'><p>Lo siento, esta mesa ya está ocupada.</p> <p>Solicita al camarero otro QR de mesa.</p></div>;
+      } else {
           
           return (
             <div className="container mx-auto py-8 mb-12">
-                <p className='text-3xl'> Mesa {tableId}</p>
+                <div className='flex justify-between items-center'>
+                  <p className='text-3xl'> Mesa {tableId}</p>
+                  <Button onClick={handleCallWaiter} className="bg-blue-500 text-white">Llamar a Camarero</Button> {/* Botón para llamar al camarero */}
+                </div>
                 <p className='my-2'>Bienvenido de nuevo a tu sesión.</p>
                 <div className="flex justify-between items-center mb-4">
                 <Button onClick={handleOpenPopup} className="bg-red-500 text-white">

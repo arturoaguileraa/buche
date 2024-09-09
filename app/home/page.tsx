@@ -87,8 +87,9 @@ const Home = () => {
     const renderClientView = () => (
         <div className="flex min-h-screen flex-col items-center justify-center bg-cover">
             <div className="container mx-auto">
-                <h1 className="text-3xl font-bold text-center mt-6">Bares Disponibles</h1>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 justify-center mt-6">
+            <h1 className="flex text-xl font-bold justify-center text-gray-700 m-3">Bienvenido, {profileData?.name}</h1>
+                <h1 className="text-3xl font-bold text-center">Bares Disponibles</h1>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 justify-center mt-2">
                     {establishments.map(bar => (
                         <BarCard
                             key={bar.id}
@@ -120,10 +121,10 @@ const Home = () => {
                         <Button onClick={handleAddEstablishment}>+ Añadir Establecimiento</Button>
                     </div>
                 </div>
-                <div className="flex flex-col justify-center mt-8"> 
+                <div className="flex flex-col justify-center mt-6"> 
                     <h1 className="flex text-xl justify-center font-bold text-gray-700">Tus establecimientos</h1>
                     {ownerestablishments.length > 0 ? (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 justify-center mt-6">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 justify-center">
                             {ownerestablishments.map(bar => (
                                 <BarCard
                                     key={bar.id}
@@ -162,11 +163,38 @@ const Home = () => {
         );
     }
 
+    const renderAdminView = () => {
+        return (
+            <div className="flex min-h-screen flex-col items-center justify-center bg-cover">
+                <div className="container mx-auto">
+                    <h1 className="text-3xl font-bold text-center mt-8">Panel de Administrador</h1>
+                    <h2 className="text-xl font-bold text-center my-3">Gestiona los Establecimientos y Usuarios</h2>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-6 justify-center mt-6">
+                        {establishments.map(bar => (
+                            <BarCard
+                                key={bar.id}
+                                id={bar.id}
+                                name={bar.name}
+                                description={bar.description}
+                                imageUrl={'https://via.placeholder.com/400x300'}
+                                operatingHours={bar.operatingHours}
+                                isOwner={true} // Como admin, no es el dueño pero puede gestionar
+                                type={bar.type}
+                            />
+                        ))}
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div>
             {profileData?.roles === 'CLIENT' && renderClientView()}
             {profileData?.roles === 'OWNER' && renderOwnerView()}
             {profileData?.roles === 'WAITER' && renderWaiterView()}
+            {profileData?.roles === 'ADMIN' && renderAdminView()}
         </div>
     );
 };

@@ -71,7 +71,7 @@ const AddProductForm: React.FC = () => {
   };
 
   return (
-    <>
+    <div className='justify-center items-center m-4'>
       <form onSubmit={handleSubmit} className="max-w-lg mx-auto px-4">
         <h2 className="text-2xl font-bold mb-4">Añadir Producto</h2>
 
@@ -158,7 +158,7 @@ const AddProductForm: React.FC = () => {
           establishmentId={establishmentId}
         />
       )}
-    </>
+    </div>
   );
 };
 

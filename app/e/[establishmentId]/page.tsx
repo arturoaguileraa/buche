@@ -115,7 +115,7 @@ const EstablishmentPage: React.FC = () => {
       )}
 
 {(isWaiter || canEditOrAddProduct) && (
-  <div className="flex w-full" style={{marginLeft: -33.33}}>
+  <div className="flex flex-wrap w-full">
     {/* Primera columna: Primer botón de cada fila */}
     <div className="flex flex-col justify-center items-center w-full md:w-1/2 p-1">
       <div className="justify-center m-1">
@@ -126,7 +126,7 @@ const EstablishmentPage: React.FC = () => {
           <div className="justify-center m-1">
             <Button onClick={handleEditEstablishment}>Editar establecimiento</Button>
           </div>
-          <div className=" justify-center m-1">
+          <div className="justify-center m-1">
             <Button onClick={handleAddProduct}>+ Añadir producto</Button>
           </div>
         </>
@@ -135,12 +135,12 @@ const EstablishmentPage: React.FC = () => {
 
     {/* Segunda columna: Segundo botón de cada fila */}
     <div className="flex flex-col justify-center items-center w-full md:w-1/2 p-1">
-      <div className=" justify-center m-1">
+      <div className="justify-center m-1">
         <Button onClick={handleAddTable}>+ Añadir mesa</Button>
       </div>
       {canEditOrAddProduct && (
         <>
-          <div className=" justify-center m-1">
+          <div className="justify-center m-1">
             <Button onClick={handleAddWaiter}>+ Añadir camarero/a</Button>
           </div>
           <div className="justify-center m-1">
@@ -151,6 +151,8 @@ const EstablishmentPage: React.FC = () => {
     </div>
   </div>
 )}
+
+
 
       
       <Menu establishmentId={Number(id)} canEditOrAddProduct={canEditOrAddProduct} inSession={false} handleSubmitOrder={function (): void {

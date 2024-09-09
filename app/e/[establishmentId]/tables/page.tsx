@@ -17,6 +17,7 @@ interface Table {
 const TablesPage = () => {
   const { establishmentId } = useParams();
   const [tables, setTables] = useState<Table[]>([]);
+  const [loading, setLoading] = useState<boolean>(true); // Estado de loading
   const router = useRouter()
 
   useEffect(() => {
@@ -24,9 +25,11 @@ const TablesPage = () => {
       api.get(`/tables/${establishmentId}`)
         .then((response) => {
           setTables(response.data);
+          setLoading(false); // Datos cargados, detenemos el estado de loading
         })
         .catch((error) => {
           console.error('Error fetching tables:', error);
+          setLoading(false); // Detenemos el loading aunque haya un error
         });
     }
   }, [establishmentId]);
@@ -60,24 +63,36 @@ const TablesPage = () => {
     );
   };
 
-  if (!tables.length) {
+  if (loading) {
     return <Loader message='Cargando mesas...'></Loader>;
   }
-  
+
   return (
     <div className="container mx-auto py-8">
       <h1 className="text-3xl font-bold">Mesas del Establecimiento</h1>
-      <div className='flex my-2'><Button  onClick={handleAddTable}>+ Añadir mesa</Button></div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {tables.map((table) => (
-          <TableCard
-            key={`${table.establishmentId}-${table.number}`}
-            table={table}
-            onDelete={handleDeleteTable}
-            onEdit={handleEditTable}
-          />
-        ))}
-      </div>
+    <Button onClick={handleAddTable} className="mt-4">+ Añadir mesa</Button>
+      {/* Mostrar el mensaje si no hay mesas */}
+      {!tables.length ? (
+        <div className="text-center mt-8">
+          <p className="text-lg">Este establecimiento no tiene mesas todavía.</p>
+          
+        </div>
+      ) : (
+        <div>
+          <div className='flex my-2'>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {tables.map((table) => (
+              <TableCard
+                key={`${table.establishmentId}-${table.number}`}
+                table={table}
+                onDelete={handleDeleteTable}
+                onEdit={handleEditTable}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

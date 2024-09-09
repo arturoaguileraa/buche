@@ -50,10 +50,16 @@ const OrderPage = () => {
   const { establishmentId } = useParams(); // Obtener establishmentId de la URL
   const [orders, setOrders] = useState<Order[]>([]); // Estado para almacenar los pedidos tipados con la interfaz Order
   const [loading, setLoading] = useState(true); // Estado para manejar la carga de datos
+  const [showNotification, setShowNotification] = useState(false); // Estado para la notificación
+  const [notificationMessage, setNotificationMessage] = useState('');
 
     // Configurar el sonido de notificación
-  const notificationSound = new Howl({
+  const notificationSound1 = new Howl({
     src: ['/notification.mp3'], // Asegúrate de que la ruta esté bien configurada
+    volume: 1.0, // Ajusta el volumen si es necesario
+  });
+  const notificationSound2 = new Howl({
+    src: ['/waiter-notification.mp3'], // Asegúrate de que la ruta esté bien configurada
     volume: 1.0, // Ajusta el volumen si es necesario
   });
 
@@ -81,11 +87,22 @@ const OrderPage = () => {
 
     // Escuchamos el evento 'orderUpdate' desde el servidor WebSocket
     socket.on('orderUpdate', (updatedOrder) => {
-      notificationSound.play();
+      notificationSound1.play();
 
       console.log('Nuevo pedido recibido:', updatedOrder);
       fetchOrders();
       // Actualizamos el estado de los pedidos al recibir un nuevo pedido
+    });
+
+    socket.on('waiterCalled', (data) => {
+      notificationSound2.play();
+      setNotificationMessage(data.message);  // Establecer el mensaje de la notificación
+      setShowNotification(true);  // Mostrar la notificación
+
+      // Ocultar la notificación después de 5 segundos
+      setTimeout(() => {
+        setShowNotification(false);
+      }, 15000);
     });
 
   }, [establishmentId]);
@@ -105,15 +122,23 @@ const OrderPage = () => {
     return <Loader message='Cargando pedidos...'></Loader>;
   }
 
+  const sortedOrders = [...orders].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
   return (
     <div className="bg-blue-100 p-5 min-h-screen">
+      {/* Notificación visual (Snackbar/Toast) */}
+      {showNotification && (
+        <div className="fixed bottom-4 right-4 bg-blue-500 text-white py-2 px-4 rounded shadow-lg transition duration-500 ease-in-out">
+          {notificationMessage}
+        </div>
+      )}
       <div className='flex justify-between mb-5'>
-        <h1 className="text-2xl font-bold text-center">Pedidos - {orders[0]?.table.establishment.name}</h1>
+        <h1 className="text-2xl font-bold text-center">Pedidos - {sortedOrders[0]?.table.establishment.name}</h1>
         <Button onClick={fetchOrders}>Recargar nuevos pedidos</Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {orders.length > 0 ? (
-          orders.map((order, index) => (
+        {sortedOrders.length > 0 ? (
+          sortedOrders.map((order, index) => (
             <OwnerOrderCard 
               key={index} 
               order={order} 
