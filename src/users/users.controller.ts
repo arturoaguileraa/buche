@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Patch, Delete } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
@@ -30,5 +30,19 @@ export class UsersController {
     return this.userService.create(createUserDto);
   }
 
+  // Ruta para actualizar un usuario por ID
+  @Patch(':id')
+  async updateUser(
+    @Param('id') id: number, 
+    @Body() updateUserDto: Partial<CreateUserDto>
+  ): Promise<User> {
+    return this.userService.update(id, updateUserDto);
+  }
+
+  // Ruta para eliminar un usuario por ID
+  @Delete(':id')
+  async deleteUser(@Param('id') id: number): Promise<void> {
+    return this.userService.delete(id);
+  }
 
 }

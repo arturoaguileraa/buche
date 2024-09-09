@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './entities/user.entity';
@@ -10,9 +10,15 @@ export class UsersService {
     return this.usersRepository.findOne({ where: { id } });
   }
   
-  async update(userId: number, updateUserDto: Partial<User>): Promise<User> {
-    await this.usersRepository.update(userId, updateUserDto);
-    return this.findOneById(userId);
+  async update(id: number, updateUserDto: Partial<CreateUserDto>): Promise<User> {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+  
+    // Actualiza el usuario con los nuevos datos
+    Object.assign(user, updateUserDto);
+    return this.usersRepository.save(user);
   }
   
   constructor(
@@ -45,4 +51,12 @@ export class UsersService {
       .andWhere('user.establishmentId IS NULL') // Asegura que el establecimiento sea nulo
       .getMany();
   }
+  async delete(id: number): Promise<void> {
+    const user = await this.usersRepository.findOne({ where: { id } });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    await this.usersRepository.remove(user);
+  }
+  
 }
