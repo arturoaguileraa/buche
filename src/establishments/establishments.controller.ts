@@ -25,6 +25,18 @@ export class EstablishmentsController {
     return this.establishmentsService.addWaiter(establishmentId, waiterId);
     }
 
+    @Get(':id/waiters')
+    async getWaitersForEstablishment(@Param('id') establishmentId: number) {
+    return this.establishmentsService.findWaiters(establishmentId);
+    }
+
+    @Delete(':id/remove-waiter/:waiterId')
+    async removeWaiterFromEstablishment(
+    @Param('id') establishmentId: number,
+    @Param('waiterId') waiterId: number,
+    ) {
+    return this.establishmentsService.removeWaiter(establishmentId, waiterId);
+    }
     
     @Get('all')
     async findAll(

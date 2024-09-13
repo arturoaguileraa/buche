@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Establishment } from './entities/establishment.entity';
@@ -52,8 +52,32 @@ export class EstablishmentsService {
     waiter.establishment = establishment;
     return this.userRepository.save(waiter); // Actualiza el camarero con el establecimiento
   }
-  
 
+  async findWaiters(establishmentId: number): Promise<User[]> {
+    const establishment = await this.establishmentRepository.findOne({
+      where: { id: establishmentId },
+      relations: ['waiters'], // Asegúrate de que la relación con waiters está bien definida en la entidad
+    });
+  
+    return establishment?.waiters || [];
+  }
+
+  async removeWaiter(establishmentId: number, waiterId: number): Promise<any> {
+    const establishment = await this.establishmentRepository.findOne({
+      where: { id: establishmentId },
+      relations: ['waiters'],
+    });
+  
+    if (establishment) {
+      establishment.waiters = establishment.waiters.filter(waiter => waiter.id !== waiterId);
+      await this.establishmentRepository.save(establishment);
+      return { message: 'Camarero eliminado exitosamente' };
+    }
+  
+    throw new NotFoundException('Establecimiento o camarero no encontrado');
+  }
+  
+  
   async findOne(id: number): Promise<Establishment> {
     return this.establishmentRepository.findOne({ relations: ['owner'], where: { id } });
   }
