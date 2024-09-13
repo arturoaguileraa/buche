@@ -86,7 +86,7 @@ const OwnerOrderCard: React.FC<OwnerOrderCardProps> = ({ order, onUpdateOrder, o
 
       {/* Mantén el total y los botones o el estado fijos en la parte inferior */}
       <div className="mt-1">
-          <strong>Total: </strong>${order.total}
+          <strong>Total: </strong>{order.total}€
       </div>
 
       <div className="mt-3">

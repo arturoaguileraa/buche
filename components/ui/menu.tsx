@@ -135,7 +135,11 @@ const handleSubmitOrderProducts = async () => {
 };
 
 const openModal = () => {
-  setIsModalOpen(true);
+  if (cart.length === 0) {
+    alert('No puedes hacer un pedido vacío.');
+  } else {
+    setIsModalOpen(true);
+  }
 };
 
 const closeModal = () => {

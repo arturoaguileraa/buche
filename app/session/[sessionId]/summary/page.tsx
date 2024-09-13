@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -64,6 +64,14 @@ const SessionSummaryPage = () => {
     router.push('/');
   };
 
+  // Calcular el total acumulado de los pedidos
+  const totalSessionAmount = session?.orders.reduce((total, order) => total + Number(order.total), 0) || 0;
+
+  // Calcular la cantidad total de productos pedidos
+  const totalProductsOrdered = session?.orders.reduce((total, order) => {
+    return total + order.orderProducts.reduce((sum, product) => sum + product.quantity, 0);
+  }, 0) || 0;
+
   if (loading) {
     return (
       <Loader></Loader>
@@ -96,6 +104,12 @@ const SessionSummaryPage = () => {
               <span className="font-semibold">Sesión terminada el:</span> {new Date(session.endTime).toLocaleString()}
             </p>
           )}
+        </div>
+
+        {/* Mostrar total acumulado de los pedidos */}
+        <div className="bg-blue-100 text-blue-800 p-4 rounded-lg shadow mb-6 text-center">
+          <p className="text-xl font-semibold">Cuenta Total: {totalSessionAmount} €</p>
+          <p className="text-lg font-medium">Total de productos pedidos: {totalProductsOrdered}</p>
         </div>
 
         <h2 className="text-2xl font-semibold text-gray-800 mb-4">Tus pedidos</h2>

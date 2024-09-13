@@ -115,6 +115,11 @@ const TablePage = () => {
   const handleClosePopup = () => {
     setSessionPopUp(false);
   };
+
+
+  const handleBackToHome = () => {
+    window.location.pathname = '';
+  };
     
 
   const handleSubmitOrder = async (totalAmount : number) => {
@@ -141,7 +146,7 @@ const TablePage = () => {
         const orderId = response.data.id; // Obtener el id del pedido creado
         console.log('Pedido creado con éxito. Pedido:', response.data);
 
-        // Emitir el evento 'newOrder' al servidor WebSocket
+      // Emitir el evento 'newOrder' al servidor WebSocket
       socket.emit('newOrder', newOrder); // Aquí emitimos el evento al servidor WebSocket
 
         return orderId; // Retorna el ID del pedido
@@ -162,16 +167,18 @@ const TablePage = () => {
 
   // Función para llamar a un camarero
   const handleCallWaiter = () => {
-    socket.emit('callWaiter', { tableId });  // Emitir el evento de llamada a camarero
+    socket.emit('callWaiter', { tableId, establishmentId });  // Emitir el evento de llamada a camarero
   };
   
   
   if (tableStatus === 'available') {
       return (
-          <div className='flex items-center justify-center min-h-screen flex-col h-full'>
+          <div className='flex items-center justify-center min-h-screen flex-col h-50'>
               <p>La mesa está disponible.</p>
               <p>¿Quieres crear una sesión?</p>
-              <Button onClick={handleStartSession}>Sí, crear sesión</Button>
+              <Button onClick={handleStartSession} className='flex m-2'>Sí, crear sesión</Button>
+              <div className='flex h-2'></div>
+              <Button onClick={handleBackToHome} variant='secondary'>No, volver al inicio</Button>
           </div>
       );
   }
@@ -185,7 +192,7 @@ const TablePage = () => {
   if (tableStatus === 'occupied') {
 
       if (!canAccessToSession) {
-          return <div className='flex flex-col min-h-screen justify-center items-center'><p>Lo siento, esta mesa ya está ocupada.</p> <p>Solicita al camarero otro QR de mesa.</p></div>;
+          return <div className='flex flex-col min-h-screen justify-center items-center'><p>Lo siento, esta mesa ya está ocupada.</p> <p>Solicita al camarero otro QR de mesa.</p> <Button onClick={handleBackToHome} variant='secondary'>Volver al inicio</Button></div>;
       } else {
           
           return (

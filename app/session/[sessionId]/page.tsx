@@ -64,9 +64,10 @@ const OrdersPage: React.FC = () => {
     } catch (error) {
         console.error("Error al volver", error)
     }
-    
+  };
 
-  }
+  // Calcular el total de todos los pedidos (cuenta actual)
+  const totalAmount = orders.reduce((sum, order) => sum + Number(order.total), 0);
 
   if (loading) {
     return <Loader></Loader>;
@@ -82,23 +83,30 @@ const OrdersPage: React.FC = () => {
 
   return (
     <div className="container mx-auto py-8">
-      <h1 className="text-2xl font-bold mb-6">Resumen de pedidos para la sesión {sessionId}</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">Resumen de Pedidos - Mesa {session.tableNumber}</h1>
+      <h2 className="text-xl font-semibold mb-4 text-center text-gray-700">Sesión #{sessionId}</h2>
+
+      {/* Total acumulado */}
+      <div className="bg-blue-100 text-blue-800 p-4 rounded-lg shadow mb-6 text-center">
+        <p className="text-xl font-semibold">Total Actual de la Cuenta: {totalAmount} €</p>
+      </div>
+
       {orders.length === 0 ? (
-        <p>No hay pedidos asociados a esta sesión.</p>
+        <p className="text-center text-gray-600">No hay pedidos asociados a esta sesión.</p>
       ) : (
         orders.map((order) => (
-          <div key={order.id} className="mb-4 p-4 border rounded shadow-md">
-            <h2 className="text-xl font-semibold mb-2">Pedido #{order.id}</h2>
-            <p><strong>Estado:</strong> {order.status}</p>
-            <p><strong>Total:</strong> {order.total} €</p>
-            <p><strong>Fecha:</strong> {new Date(order.date).toLocaleDateString()}</p>
+          <div key={order.id} className="mb-4 p-4 border rounded-lg shadow-md bg-white">
+            <h2 className="text-xl font-semibold mb-2 text-gray-800">Pedido #{order.id}</h2>
+            <p><strong>Estado:</strong> <span className="text-gray-600">{order.status}</span></p>
+            <p><strong>Total:</strong> <span className="text-gray-600">{order.total} €</span></p>
+            <p><strong>Fecha:</strong> <span className="text-gray-600">{new Date(order.date).toLocaleDateString()}</span></p>
 
             <div className="mt-4">
-              <h3 className="text-lg font-semibold">Productos:</h3>
+              <h3 className="text-lg font-semibold text-gray-800">Productos:</h3>
               <ul className="list-disc ml-6">
                 {order.orderProducts.map((product) => (
-                  <li key={product.id}>
-                    {product.quantity}x {product.name} - {product.priceAtTimeOfOrder} €
+                  <li key={product.id} className="text-gray-700">
+                    {product.quantity}x {product.name} - {product.priceAtTimeOfOrder} € (Total: {(product.quantity * product.priceAtTimeOfOrder)} €)
                   </li>
                 ))}
               </ul>
@@ -106,14 +114,16 @@ const OrdersPage: React.FC = () => {
           </div>
         ))
       )}
-      
+
       {/* Botón para volver a los pedidos */}
-      <button
-        onClick={handleGoBack} // Navegación
-        className="mt-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
-      >
-        Volver a los pedidos
-      </button>
+      <div className="text-center">
+        <button
+          onClick={handleGoBack} // Navegación
+          className="mt-6 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+        >
+          Volver a los pedidos
+        </button>
+      </div>
     </div>
   );
 };

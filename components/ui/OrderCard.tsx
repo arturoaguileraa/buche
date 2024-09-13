@@ -31,10 +31,7 @@ const OrderCard: React.FC<{ order: Order }> = ({ order }) => {
   return (
     <li className="border border-gray-200 rounded-lg p-4 shadow-sm">
       <p className="text-lg text-gray-700">
-        <span className="font-semibold">ID de pedido:</span> {order.id}
-      </p>
-      <p className="text-lg text-gray-700">
-        <span className="font-semibold">Total:</span> ${order.total}
+        <span className="font-semibold">Total:</span> {order.total}€
       </p>
       <p className="text-lg text-gray-700">
         <span className="font-semibold">Fecha:</span> {new Date(order.date).toLocaleString()}
@@ -59,7 +56,7 @@ const OrderCard: React.FC<{ order: Order }> = ({ order }) => {
                   <span className="font-semibold">Cantidad:</span> {op.quantity}
                 </p>
                 <p className="text-md text-gray-700">
-                  <span className="font-semibold">Precio:</span> ${op.priceAtTimeOfOrder}
+                  <span className="font-semibold">Precio:</span> {op.priceAtTimeOfOrder}€
                 </p>
               </li>
             ))}

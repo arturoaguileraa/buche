@@ -158,14 +158,21 @@ const Home = () => {
     const renderWaiterView = () => {
         return (
         <div className="flex min-h-screen flex-col items-center bg-cover">
-            <div className="container mx-auto">
-                <h1 className="text-3xl font-bold text-center mt-8">Tu Panel de Camarero</h1>
+            {profileData?.establishment ? (<div className="container mx-auto">
+                <h1 className="text-xl font-bold text-center text-gray-700 mb-2 mt-8">Bienvenido, {profileData?.name}</h1>
+                <h1 className="text-3xl font-bold text-center ">Tu Panel de Camarero</h1>
                 <h2 className="text-xl font-bold text-center my-3">Establecimiento: {profileData?.establishment?.name}</h2>
-                <div className="flex w-full flex-col justify-center space-y-4">
+                <div className="flex w-full flex-col h-96 justify-center space-y-4">
                     <Button className="flex w-1/2" onClick={() => window.location.href = `/e/${profileData?.establishment?.id}`}>Ver Establecimiento</Button>
                     <Button className="flex w-1/2" onClick={() => window.location.href = `/e/${profileData?.establishment?.id}/tables`}>Ver Mesas</Button>
                 </div>
-            </div>
+            </div>) : 
+            <div className="container mx-auto">
+            <h1 className="text-xl font-bold text-center text-gray-700 mb-2 mt-8">Bienvenido, {profileData?.name}</h1>
+            <h1 className="text-3xl font-bold text-center ">Todavía no tienes asignado un establecimiento.</h1>
+            
+        </div>
+            }
         </div>
         );
     }
