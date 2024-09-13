@@ -10,7 +10,7 @@ import { Order } from './entities/order.entity';
   
 @WebSocketGateway({
     cors: {
-      origin: process.env.FRONTEND_URL, // Permitir el frontend
+      origin: true, // Permitir cualquier origen
       methods: ['GET', 'POST'], // Los métodos permitidos
       credentials: true, // Si necesitas autenticación o cookies
     },
@@ -21,6 +21,7 @@ import { Order } from './entities/order.entity';
     // Método para emitir un evento cuando se crea o actualiza un pedido
     emitOrderUpdate(order: Order) {
       this.server.emit('orderUpdate', order);
+
     }
   
     @SubscribeMessage('newOrder')
@@ -31,8 +32,8 @@ import { Order } from './entities/order.entity';
     // Escuchar el evento "callWaiter" para llamar al camarero
     @SubscribeMessage('callWaiter')
     handleCallWaiter(@MessageBody() data: any) {
-      const { tableId } = data;
-      this.server.emit('waiterCalled', { message: `La mesa ${tableId} ha solicitado un camarero.` });
+      const { tableId, establishmentId } = data;
+      this.server.emit('waiterCalled', { establishmentId, message: `La mesa ${tableId} ha solicitado un camarero.` });
     }
   }
   
