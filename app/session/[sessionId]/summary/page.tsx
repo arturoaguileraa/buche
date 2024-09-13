@@ -64,13 +64,17 @@ const SessionSummaryPage = () => {
     router.push('/');
   };
 
-  // Calcular el total acumulado de los pedidos
-  const totalSessionAmount = session?.orders.reduce((total, order) => total + Number(order.total), 0) || 0;
+  // Calcular el total acumulado de los pedidos que no estén cancelados
+  const totalSessionAmount = session?.orders
+    .filter(order => order.status === 'completed') // Filtrar los pedidos que no están cancelados
+    .reduce((total, order) => total + Number(order.total), 0) || 0;
 
-  // Calcular la cantidad total de productos pedidos
-  const totalProductsOrdered = session?.orders.reduce((total, order) => {
-    return total + order.orderProducts.reduce((sum, product) => sum + product.quantity, 0);
-  }, 0) || 0;
+  // Calcular la cantidad total de productos pedidos de los pedidos que no están cancelados
+  const totalProductsOrdered = session?.orders
+    .filter(order => order.status === 'completed') // Filtrar los pedidos que no están cancelados
+    .reduce((total, order) => {
+      return total + order.orderProducts.reduce((sum, product) => sum + product.quantity, 0);
+    }, 0) || 0;
 
   if (loading) {
     return (
