@@ -13,7 +13,6 @@ import { Howl } from 'howler';
 
 const socket = io(process.env.NEXT_PUBLIC_API_URL + '');
 
-
 export interface Table {
   number: number;
   establishment: any;
@@ -69,7 +68,6 @@ const OrderPage = () => {
   const fetchOrders = async () => {
     try {
       const response = await api.get(`/orders/establishment/${establishmentId}`);
-      
       setOrders(response.data);
     } catch (error) {
       console.error('Error fetching orders:', error);
@@ -87,27 +85,44 @@ const OrderPage = () => {
       console.log('Conectado al WebSocket');
     });
 
-    // Escuchamos el evento 'orderUpdate' desde el servidor WebSocket
-    socket.on('orderUpdate', (updatedOrder) => {
+  // Escuchar el evento 'orderUpdate' desde el servidor WebSocket
+  socket.on('orderUpdate', (updatedOrder) => {
+    // Solo procesar si el establecimiento coincide
+    if (updatedOrder.establishmentId === Number(establishmentId)) {
       notificationSound1.play();
-
       console.log('Nuevo pedido recibido:', updatedOrder);
-      fetchOrders();
-      // Actualizamos el estado de los pedidos al recibir un nuevo pedido
-    });
+      fetchOrders(); // Actualizar la lista de pedidos
+    }
+  });
 
-    socket.on('waiterCalled', (data) => {
+  // Escuchar el evento 'waiterCalled' desde el servidor WebSocket
+  socket.on('waiterCalled', (data) => {
+    // Solo procesar si el establecimiento coincide
+    if (Number(data.establishmentId) === Number(establishmentId)) {
       notificationSound2.play();
-      setNotificationMessage(data.message);  // Establecer el mensaje de la notificación
-      setShowNotification(true);  // Mostrar la notificación
+      setNotificationMessage(data.message);
+      setShowNotification(true); // Mostrar la notificación
 
-      // Ocultar la notificación después de 5 segundos
+      // Ocultar la notificación después de 15 segundos
       setTimeout(() => {
         setShowNotification(false);
       }, 15000);
-    });
+    }
+  });
 
   }, [establishmentId]);
+
+  // Función para agrupar pedidos por día
+  const groupOrdersByDay = (orders: Order[]) => {
+    return orders.reduce((groups: { [date: string]: Order[] }, order: Order) => {
+      const date = new Date(order.date).toLocaleDateString(); // Convertir la fecha en string
+      if (!groups[date]) {
+        groups[date] = [];
+      }
+      groups[date].push(order);
+      return groups;
+    }, {});
+  };
 
   // Función para actualizar el pedido en la lista
   const handleUpdateOrder = (updatedOrder: Order) => {
@@ -124,7 +139,11 @@ const OrderPage = () => {
     return <Loader message='Cargando pedidos...'></Loader>;
   }
 
+  // Ordenar los pedidos por fecha
   const sortedOrders = [...orders].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
+  // Agrupar los pedidos por día
+  const groupedOrders = groupOrdersByDay(sortedOrders);
 
   return (
     <div className="bg-blue-100 p-5 min-h-screen">
@@ -138,20 +157,25 @@ const OrderPage = () => {
         <h1 className="text-2xl font-bold text-center">Pedidos - {sortedOrders[0]?.table.establishment.name}</h1>
         <Button onClick={fetchOrders}>Recargar nuevos pedidos</Button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {sortedOrders.length > 0 ? (
-          sortedOrders.map((order, index) => (
-            <OwnerOrderCard 
-              key={index} 
-              order={order} 
-              onUpdateOrder={handleUpdateOrder} // Pasamos la función de actualización
-              onDeleteOrder={handleDeleteOrder}
-            />
-          ))
-        ) : (
-          <div className="text-center col-span-full">No hay pedidos disponibles.</div>
-        )}
-      </div>
+      {Object.entries(groupedOrders).map(([date, orders]) => (
+        <div key={date} className="mb-10">
+          <h2 className="text-xl font-semibold mb-4">{date}</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {orders.length > 0 ? (
+              orders.map((order, index) => (
+                <OwnerOrderCard 
+                  key={index} 
+                  order={order} 
+                  onUpdateOrder={handleUpdateOrder} // Pasamos la función de actualización
+                  onDeleteOrder={handleDeleteOrder}
+                />
+              ))
+            ) : (
+              <div className="text-center col-span-full">No hay pedidos disponibles para esta fecha.</div>
+            )}
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
