@@ -120,7 +120,6 @@ export async function middleware(request: NextRequestWithAuth) {
       }
       }
   }
-  console.log("fin");
   
   return NextResponse.next();
 }
