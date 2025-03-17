@@ -83,10 +83,6 @@ Si deseas contribuir al desarrollo de Buche:
    ```
 4. Envía un pull request describiendo tus cambios.
 
-## Licencia
-
-Este proyecto está licenciado bajo la [MIT License](LICENSE).
-
 ## Contacto
 
 Para más información o soporte, puedes contactarnos a través de [arturoaguilera.es](https://arturoaguilera.es).
